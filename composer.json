@@ -1,0 +1,14 @@
+{
+    "name": "faridmia/ultimate-product-options-for-woocommerce",
+    "description": "Add extra product options like text fields, radio fields, and checkboxes to your WooCommerce products.",
+    "type": "wordpress-plugin",
+    "license": "GPLv2",
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Ultimate\\Upow\\": "src/"
+        },
+        "files": [ "src/functions.php"]
+    }
+}

@@ -1,0 +1,164 @@
+:root {
+    /* Color Variables */
+    --upow-border-color: #ddd; /* Border color */
+    --upow-background-color-light: #f1f1f1; /* Light background color */
+    --upow-background-color-medium: #ccc; /* Medium background color */
+    --upow-background-color-dark: #2196F3; /* Dark background color */
+    --upow-text-color-light: #fff; /* Light text color */
+    --upow-text-color-dark: #000; /* Dark text color */
+    --upow-button-bg-color-remove: red; /* Background color for remove button */
+    --upow-button-bg-color-add: green; /* Background color for add button */
+    
+    /* Padding and Margin Variables */
+    --upow-padding-small: 5px;
+    --upow-padding-medium: 8px;
+    --upow-padding-large: 10px;
+    --upow-margin-small: 5px;
+    --upow-margin-medium: 10px;
+    --upow-margin-large: 15px;
+    
+    /* Size Variables */
+    --upow-width-full: 100%;
+    --upow-width-switch: 60px;
+    --upow-height-switch: 34px;
+    --upow-width-slider: 26px;
+    --upow-height-slider: 26px;
+  }
+  
+
+
+  /* Container for extra field group with border and margin */
+.upow-extra-field-group {
+    border: 1px solid var(--upow-border-color);
+    margin-bottom: var(--upow-margin-medium);
+    cursor: move;
+  }
+  
+  /* Header for extra field group with background, padding, and font weight */
+  .upow-extra-field-group-header {
+    background: var(--upow-background-color-light);
+    padding: var(--upow-padding-large);
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  /* Body of extra field group with padding and hidden by default */
+  .upow-extra-field-group-body {
+    padding: var(--upow-padding-large);
+    display: none;
+  }
+  
+  /* Labels inside the extra field group with margin */
+  .upow-extra-field-group label {
+    display: block;
+    margin-bottom: var(--upow-margin-small);
+    float: none !important;
+    margin: 0 !important;
+}
+  
+  /* Inputs and selects inside the extra field group with padding and margin */
+  .upow-extra-field-group input,
+  .upow-extra-field-group select {
+    width: var(--upow-width-full)!important;
+    padding: var(--upow-padding-medium);
+    margin-bottom: var(--upow-margin-medium);
+  }
+  
+  /* Remove button with background, text color, border, and padding */
+  .upow-extra-field-group button.remove-upow-extra-field-group {
+    background-color: var(--upow-button-bg-color-remove);
+    color: var(--upow-text-color-light);
+    border: none;
+    padding: var(--upow-padding-small) var(--upow-padding-medium);
+    cursor: pointer;
+  }
+  
+  /* Add button with background, text color, border, and padding */
+  #add-upow-extra-field-group {
+    display: block;
+    margin-top: var(--upow-margin-large);
+    padding: var(--upow-padding-large) var(--upow-padding-medium);
+    background-color: var(--upow-button-bg-color-add);
+    color: var(--upow-text-color-light);
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Wrapper for extra options with list style and padding reset */
+  #upow-extra-options-wrapper {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  #woocommerce-product-data #upow-extra-options-wrapper { 
+    padding: 30px;
+  }
+
+  #woocommerce-product-data .remove-upow-extra-field-group {
+    margin-left: 10px;
+  }
+  
+  /* Hide the default checkbox */
+  .upow-label-switch input {
+    display: none;
+  }
+  
+  /* Custom label switch with position, display, and size */
+  .upow-label-switch {
+    position: relative;
+    display: inline-block;
+    width: var(--upow-width-switch);
+    height: var(--upow-height-switch);
+  }
+  
+  /* Slider with position, background, transition, and border radius */
+  .upow-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 60px!important;
+    background-color: var(--upow-background-color-medium);
+    transition: 0.4s;
+    border-radius: var(--upow-height-switch);
+  }
+  
+  /* Slider handle with position, size, background, transition, and border radius */
+  .upow-slider:before {
+    position: absolute;
+    content: "";
+    height: var(--upow-height-slider);
+    width: var(--upow-width-slider);
+    left: var(--upow-padding-small);
+    bottom: var(--upow-padding-small);
+    background-color: var(--upow-text-color-light);
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+  
+  /* Slider background and handle transform when checked */
+  input:checked + .upow-slider {
+    background-color: var(--upow-background-color-dark);
+  }
+  
+  input:checked + .upow-slider:before {
+    transform: translateX(calc(var(--upow-width-switch) - var(--upow-width-slider) - var(--upow-padding-small) * 2));
+  }
+  
+  /* Rounded sliders */
+  .upow-slider.upow-round {
+    border-radius: var(--upow-height-switch);
+  }
+  
+  .upow-slider.upow-round:before {
+    border-radius: 50%;
+  }
+  
+  /* Title for extra item groups with margin and width */
+  .extra-item-group-title {
+    margin: var(--upow-margin-large) 0;
+    width: var(--upow-width-full);
+  }

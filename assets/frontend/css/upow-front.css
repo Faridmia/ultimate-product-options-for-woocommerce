@@ -1,0 +1,233 @@
+:root {
+  /* Color Variables */
+  --upow-primary-color: #777; /* Primary color used for text and icons */
+  --upow-secondary-color: #efecec69; /* Secondary color used for backgrounds */
+  --upow-background-color: #fff; /* Background color for inputs */
+  --upow-border-color: #ebebeb; /* Border color for inputs and dividers */
+
+  
+  /* Font Size Variables */
+  --upow-font-size-small: 13px;
+  --upow-font-size-medium: 14px;
+  --upow-font-size-large: 15px;
+  --upow-font-size-xl: 16px;
+  --upow-font-size-xxl: 30px;
+  
+  /* Font Weight Variables */
+  --upow-font-weight-normal: 400;
+  --upow-font-weight-medium: 600;
+  --upow-font-weight-bold: 600;
+}
+
+
+/* Wrapper for the custom div inside WooCommerce input wrapper */
+.woocommerce-input-wrapper .eaw-custom-div {
+  display: flex;
+  align-items: center;
+}
+
+/* Margin for labels inside the custom div */
+.woocommerce-input-wrapper .eaw-custom-div label {
+  margin-left: 15px;
+}
+
+/* Styles for the extra wrap title */
+.upow-extra-acc-wrap .upow-extra-wrap-title {
+  font-size: var(--upow-font-size-xxl);
+  font-weight: var(--upow-font-weight-medium);
+  margin-bottom: 15px;
+}
+
+/* Styles for the accordion container */
+.upow-extra-acc {
+  display: block;
+  margin: auto;
+}
+
+/* Styles for each accordion item */
+.upow-extra-acc .upow-extra-acc-item {
+  width: 100%;
+  height: auto;
+  margin: 8px 0;
+}
+
+/* Styles for the title tab of each accordion item */
+.upow-extra-acc .upow-extra-acc-item .upow-extra-title-tab {
+  background-color: var(--upow-secondary-color);
+  color: var(--upow-primary-color);
+  padding: 12px 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in;
+  border-radius: 4px;
+}
+
+/* Styles for the title inside the title tab */
+.upow-extra-acc .upow-extra-acc-item .upow-extra-title-tab .title {
+  letter-spacing: 1px;
+  position: relative;
+  text-transform: capitalize;
+  font-weight: var(--upow-font-weight-medium);
+  margin: 0;
+  color: var(--upow-primary-color);
+  font-size: var(--upow-font-size-xl);
+}
+
+/* Styles for the icon inside the title tab */
+.upow-extra-acc .upow-extra-acc-item .upow-extra-title-tab .title .icon {
+  position: absolute;
+  right: 0;
+  top: calc(50% - 5px);
+  width: 10px;
+  height: 10px;
+  background-color: transparent;
+  transform: rotate(-90deg);
+  transition: transform 0.3s ease-in;
+}
+
+/* Styles for the before and after pseudo-elements of the icon */
+.upow-extra-acc .upow-extra-acc-item .upow-extra-title-tab .title .icon:before,
+.upow-extra-acc .upow-extra-acc-item .upow-extra-title-tab .title .icon:after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 2px;
+  background-color: var(--upow-primary-color);
+}
+
+/* Specific position and rotation for before pseudo-element */
+.upow-extra-acc .upow-extra-acc-item .upow-extra-title-tab .title .icon:before {
+  top: 2;
+  left: 0px;
+  transform: rotate(-45deg);
+}
+
+/* Specific position and rotation for after pseudo-element */
+.upow-extra-acc .upow-extra-acc-item .upow-extra-title-tab .title .icon:after {
+  top: 2;
+  right: 2px;
+  transform: rotate(45deg);
+}
+
+/* Default hidden state for the inner content of accordion items */
+.upow-extra-acc .upow-extra-acc-item .upow-inner-content {
+  width: 100%;
+  height: auto;
+  display: none;
+}
+
+/* Flexbox styles for extra options within accordion items */
+.upow-extra-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0 0 15px;
+  font-size: var(--upow-font-size-large);
+  color: var(--upow-primary-color);
+}
+
+/* Additional padding for the first child of extra options */
+.upow-extra-options:first-child {
+  padding-top: 20px;
+}
+
+/* Additional padding for the last child of extra options */
+.upow-extra-options:last-child {
+  padding-bottom: 10px;
+}
+
+/* Remove margin for labels inside the extra options */
+.upow-extra-acc .upow-extra-acc-item .upow-inner-content .upow-extra-options label {
+  margin-bottom: 0 !important;
+}
+
+/* General paragraph styles inside the accordion inner content */
+.upow-extra-acc .upow-extra-acc-item .upow-inner-content p {
+  width: 98%;
+  margin: auto;
+  padding: 18px 15px;
+  font-size: var(--upow-font-size-large);
+  line-height: 28px;
+  letter-spacing: 1px;
+}
+
+/* Padding for extra options inside the accordion inner content */
+.upow-extra-acc .upow-extra-acc-item .upow-inner-content .upow-extra-options {
+  padding-right: 15px;
+}
+
+/* Rotate icon when the title tab is active */
+.upow-extra-acc-item .upow-extra-title-tab.active .title .icon {
+  transform: rotate(0deg);
+  transition: transform 0.3s ease-in;
+}
+
+/* Styles for input field labels */
+label.upow_input_field {
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+}
+
+/* Block display for input field group */
+.upow-extra-options.upow-input-field-group {
+  display: block;
+}
+
+/* Flex direction for labels inside the input field group */
+.upow-extra-options.upow-input-field-group label {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Margin for item label text inside the input field group */
+.upow-input-field-group .upow-item-label-text {
+  margin-bottom: 5px;
+}
+
+/* Styles for text inputs inside the input field group */
+.upow-extra-options.upow-input-field-group input[type="text"] {
+  outline: none;
+  height: 30px;
+  background: var(--upow-background-color);
+  border: 1px solid var(--upow-border-color);
+  box-shadow: none;
+  font-size: var(--upow-font-size-small);
+  padding: 8px 20px;
+}
+
+/* Margin and padding adjustments for total prices paragraphs */
+.upow-options-total-prices p,
+.upow-total-prices p {
+  margin: 0;
+}
+
+/* Styles for the pricing info section */
+.upow-extra-addons-pricing-info {
+  background: var(--upow-secondary-color);
+  padding: 12px 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  color: var(--upow-primary-color);
+}
+
+/* Flexbox styles for paragraphs inside the pricing info section */
+.upow-extra-addons-pricing-info p {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--upow-border-color);
+  font-size: var(--upow-font-size-medium);
+  color: var(--upow-primary-color);
+  font-weight: var(--upow-font-weight-bold);
+}
+
+/* Remove border for the last paragraph in the pricing info section */
+.upow-extra-addons-pricing-info div:last-child p {
+  border: none;
+}
+
+/* Additional margin for the first extra option inside the inner content */
+.upow-inner-content .upow-extra-options:first-of-type {
+  margin-top: 10px;
+}
