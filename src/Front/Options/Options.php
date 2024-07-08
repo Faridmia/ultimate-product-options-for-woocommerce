@@ -294,7 +294,6 @@ class Options
                 $cart_item_data['upow_custom_field_items_data_price']  = $extra_item_prices;
                 $cart_item_data['upow_item_label_text']                = $upow_item_label_text;
 
-                // $sanitized_data = sanitize_upow_custom_field_items_data($cart_item_data['upow_custom_field_items_data']);
                 update_option('upow_extra_fields_items', $cart_item_data['upow_custom_field_items_data']);
             }
 
