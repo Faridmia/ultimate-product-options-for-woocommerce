@@ -7,7 +7,7 @@ use Ultimate\Upow\Traitval\Traitval;
 class Options
 {
     use Traitval;
-
+    public $global_product_id;
     /**
      * Constructor
      * 
@@ -19,6 +19,31 @@ class Options
         add_action('woocommerce_before_add_to_cart_button', array($this, 'upow_add_custom_fields_single_page'));
         add_filter('woocommerce_add_to_cart_validation', array($this, 'upow_validate_custom_fields'), 10, 3);
         add_filter('woocommerce_add_cart_item_data', array($this, 'upow_add_custom_fields_to_cart'), 10, 2);
+        add_action('wp', array($this, 'initialize_product_id'));
+        add_action('wp_enqueue_scripts', [$this, 'localize_script'], 100);
+    }
+
+     /**
+     * Initialize the global product ID.
+     * 
+     * This function is hooked into 'wp' to ensure the product is set up before getting the ID.
+     */
+    public function initialize_product_id()
+    {
+        if (is_product()) {
+            $this->global_product_id = get_the_ID( );
+        }
+    }
+
+    public function localize_script() {
+
+        // Ensure the script is enqueued before localizing
+        if (wp_script_is('upow-frontend-script', 'enqueued')) {
+            wp_localize_script('upow-frontend-script', 'upow_localize_product_obj', array(
+                'productId' => $this->global_product_id
+            ));
+        }
+
     }
 
 
@@ -240,7 +265,7 @@ class Options
         public function upow_validate_custom_fields($passed, $product_id, $quantity)
         {
 
-            if (!isset($_POST['upow_template_nonce']) || !wp_verify_nonce($_POST['upow_template_nonce'], 'upow_template_nonce')) {
+            if ( ! isset( $_POST['upow_template_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash ( $_POST['upow_template_nonce'] ) ) , 'upow_template_nonce' ) ) {
                 return;
             }
 
@@ -266,17 +291,17 @@ class Options
         public function upow_add_custom_fields_to_cart($cart_item_data, $product_id)
         {
 
-            if (!isset($_POST['upow_template_nonce'])  && !wp_verify_nonce($_POST['upow_template_nonce'], 'upow_template_nonce')) {
+            if ( ! isset( $_POST['upow_template_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash ( $_POST['upow_template_nonce'] ) ) , 'upow_template_nonce' ) ) {
                 return;
             }
 
-            if (isset($_POST['upow_custom_field_items_data'])) {
+            if (isset($_POST['upow_custom_field_items_data']) && is_array($_POST['upow_custom_field_items_data']) ) {
 
                 $upow_item_label_text  = isset($_POST['upow_item_label_text']) ? wc_clean($_POST['upow_item_label_text']) : array();
                 $extra_item_data        = array();
                 $extra_item_prices      = 0;
 
-                foreach ($_POST['upow_custom_field_items_data'] as $key => $value) {
+                foreach ( sanitize_upow_custom_field_items_data( wp_unslash($_POST['upow_custom_field_items_data']) ) as $key => $value) {
 
                     if (is_array($value)) {
                         foreach ($value as $sub_value) {

@@ -1,7 +1,5 @@
 <?php
-
 namespace Ultimate\Upow\Admin\Metaboxes;
-
 use Ultimate\Upow\Traitval\Traitval;
 
 /**
@@ -151,7 +149,7 @@ class Metaboxes
     {
         // Verify nonce
 
-        if (!isset($_POST['upow-metaboxes-nonce']) || !wp_verify_nonce($_POST['upow-metaboxes-nonce'], 'upow-metaboxes-nonce')) {
+        if ( ! isset( $_POST['upow-metaboxes-nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash ( $_POST['upow-metaboxes-nonce'] ) ) , 'upow-metaboxes-nonce' ) ) {
             return;
         }
 
@@ -174,8 +172,7 @@ class Metaboxes
 
         // Handle multiple instances of upow_product
         if (isset($_POST['upow_product'])) {
-            $new_items = $_POST['upow_product'];
-            $sanitized_data = sanitize_upow_custom_field_items_data($new_items);
+            $sanitized_data = sanitize_upow_custom_field_items_data( $_POST['upow_product'] );
             update_post_meta($post_id, 'upow_product', $sanitized_data);
         } else {
             delete_post_meta($post_id, 'upow_product');

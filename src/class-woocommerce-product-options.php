@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
 // Include the Composer autoloader
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -73,7 +74,7 @@ final class UpowWooProductOptions
         $currency_position  = get_option('woocommerce_currency_pos');
 
         // Localize the script with currency data
-        wp_localize_script('upow-frontend-script', 'woo_currency', array(
+        wp_localize_script('upow-frontend-script', 'woo_front_obj', array(
             'symbol'   => $currency_symbol,
             'position' => $currency_position,
         ));

@@ -1,7 +1,5 @@
 <?php
-
 namespace Ultimate\Upow\Front;
-
 use Ultimate\Upow\Traitval\Traitval;
 use Ultimate\Upow\Front\Options\Options;
 

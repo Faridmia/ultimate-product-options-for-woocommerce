@@ -1,7 +1,5 @@
 <?php
-
 namespace Ultimate\Upow\Hookwoo;
-
 use Ultimate\Upow\Traitval\Traitval;
 use Ultimate\Upow\Hookwoo\Cart\Cart;
 use Ultimate\Upow\Hookwoo\Order\Order;

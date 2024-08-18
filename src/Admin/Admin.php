@@ -1,7 +1,5 @@
 <?php
-
 namespace Ultimate\Upow\Admin;
-
 use Ultimate\Upow\Admin\Menu\Menu;
 use Ultimate\Upow\Admin\Metaboxes\Metaboxes;
 use Ultimate\Upow\Traitval\Traitval;

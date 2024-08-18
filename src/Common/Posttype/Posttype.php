@@ -1,7 +1,5 @@
 <?php
-
 namespace Ultimate\Upow\Common\PostType;
-
 use Ultimate\Upow\Traitval\Traitval;
 
 /**

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Filter the allowed HTML tags for a specific context.
  *
@@ -65,20 +64,11 @@ function upow_kses_allowed_html($upow_tags, $upow_context)
     }
 }
 
-
-function sanitize_upow_custom_field_items_data($data)
-{
-    $sanitized_data = array();
-
-    if (is_array($data)) {
-        foreach ($data as $key => $value) {
-            $sanitized_key = sanitize_key($key);
-            $sanitized_value = array_map('sanitize_text_field', $value);
-            $sanitized_data[$sanitized_key] = $sanitized_value;
-        }
+function sanitize_upow_custom_field_items_data( $field ){
+    if( is_array( $field ) ) {
+        $value = array_map( 'sanitize_text_field', $field );
     } else {
-        $sanitized_data = sanitize_text_field($data);
+        $value = sanitize_text_field( $field );
     }
-
-    return $sanitized_data;
+    return $value;
 }

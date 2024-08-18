@@ -4,20 +4,35 @@
     function UpowGetBasePrice() {
         // Check if there's a sale price
 
-        var salePriceElement = $('[data-is-descendent-of-single-product-template="true"] ins .woocommerce-Price-amount bdi').first();
-
         var variable_price = $('.single_variation_wrap .woocommerce-variation .woocommerce-variation-price .woocommerce-Price-amount bdi');
+        var salePriceElement2 = '';
+        var productId = upow_localize_product_obj.productId;
+        if( !variable_price.length > 0 ) {
+            var salePriceElement2 = $('[data-is-descendent-of-single-product-template="true"] ins .woocommerce-Price-amount bdi').first();
+            if( !salePriceElement2.length > 0 ) {
+                
+               salePriceElement2 = $("#product-"+productId+" ins .woocommerce-Price-amount").first();
+            }
+
+            if( !salePriceElement2.length > 0 ) {
+               var salePriceElement2 = $("#product-"+productId+" .woocommerce-Price-amount").first();
+            }
+        }
         
-        if (salePriceElement.length > 0) {
-            return parseFloat(salePriceElement.text().replace(/[^0-9.-]+/g, ""));
+        if (salePriceElement2.length > 0) {
+            return parseFloat(salePriceElement2.text().replace(/[^0-9.-]+/g, ""));
         } else if(variable_price.length > 0) {
            return parseFloat(variable_price.first().text().replace(/[^0-9.-]+/g, ""));
         }
         else {
-            return parseFloat($('[data-is-descendent-of-single-product-template="true"] .woocommerce-Price-amount bdi').first().text().replace(/[^0-9.-]+/g, ""));
-
-            
+            var priceElement = $('[data-is-descendent-of-single-product-template="true"] .woocommerce-Price-amount bdi').first();
+            if(!priceElement.length > 0 ) {
+                var priceElement = $('#product-"+productId+" ins .woocommerce-Price-amount bdi').first();
+            }
+            return parseFloat(priceElement.text().replace(/[^0-9.-]+/g, ""));
+           
         }
+
     }
 
     // Update prices function
@@ -67,8 +82,8 @@
 
     // Function to format the price according to WooCommerce settings
     function upowFormatCurrency(price) {
-        let symbol = woo_currency.symbol;
-        let position = woo_currency.position;
+        let symbol = woo_front_obj.symbol;
+        let position = woo_front_obj.position;
         let formatted_price = price.toFixed(2);
 
         switch (position) {
@@ -105,23 +120,48 @@
 
     // accordion js
     jQuery(document).ready(function($) {
-        let $titleTab = $('.upow-extra-title-tab');
-        $('.upow-extra-acc-item:eq(0)').find('.upow-extra-title-tab').addClass('active').next().stop().slideDown(300);
-        $titleTab.on('click', function(e) {
-        e.preventDefault();
-            if ( $(this).hasClass('active') ) {
-                $(this).removeClass('active');
-                $(this).next().stop().slideUp(500);
-                $(this).next().find('p').removeClass('show');
-            } else {
-                $(this).addClass('active');
-                $(this).next().stop().slideDown(500);
-                $(this).parent().siblings().children('.upow-extra-title-tab').removeClass('active');
-                $(this).parent().siblings().children('.upow-inner-content').slideUp(500);
-                $(this).parent().siblings().children('.upow-inner-content').find('p').removeClass('show');
-                $(this).next().find('p').addClass('show');
+
+        if( woo_front_obj.upow_accordion_style_on_off == 'yes') {
+            
+            let $titleTab = $('.upow-extra-title-tab');
+            $('.upow-extra-acc-item:eq(0)').find('.upow-extra-title-tab').addClass('active').next().stop().slideDown(300);
+            $titleTab.on('click', function(e) {
+                e.preventDefault();
+                if ( $(this).hasClass('active') ) {
+                    $(this).removeClass('active');
+                    $(this).next().stop().slideUp(500);
+                    $(this).next().find('p').removeClass('show');
+                } else {
+                    $(this).addClass('active');
+                    $(this).next().stop().slideDown(500);
+                    $(this).parent().siblings().children('.upow-extra-title-tab').removeClass('active');
+                    $(this).parent().siblings().children('.upow-inner-content').slideUp(500);
+                    $(this).parent().siblings().children('.upow-inner-content').find('p').removeClass('show');
+                    $(this).next().find('p').addClass('show');
+                }
+            });
+
+        } else {
+
+            $('.upow-extra-acc-item').find('.upow-extra-title-tab').addClass('active');
+            let innerContent = document.querySelectorAll('.upow-inner-content');
+            let accIcon = document.querySelectorAll('.upow-extra-title-tab .icon');
+
+            for( let i = 0; i<= innerContent.length; i++ ) {
+                if(innerContent[i]) {
+                    innerContent[i].style.display = "block";
+                }
+                
             }
-        });
+
+            for( let i = 0; i<= accIcon.length; i++ ) {
+                if(accIcon[i]) {
+                    accIcon[i].style.display = "none";
+                }
+                
+            }
+            
+        }
     });
 
 

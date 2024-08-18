@@ -1,7 +1,5 @@
 <?php
-
 namespace Ultimate\Upow\Admin\Menu;
-
 use Ultimate\Upow\Traitval\Traitval;
 
 /**
