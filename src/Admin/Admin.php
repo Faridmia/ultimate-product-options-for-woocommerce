@@ -3,6 +3,7 @@ namespace Ultimate\Upow\Admin;
 use Ultimate\Upow\Admin\Menu\Menu;
 use Ultimate\Upow\Admin\Metaboxes\Metaboxes;
 use Ultimate\Upow\Traitval\Traitval;
+use Ultimate\Upow\Admin\AdminPanel\AdminPanel;
 
 /**
  * Class Admin
@@ -18,8 +19,9 @@ class Admin
     /**
      * @var Menu $menu_instance An instance of the Menu class.
      */
-    public $menu_instance;
-    public $metabox_instance;
+    protected $menu_instance;
+    protected $metabox_instance;
+    protected $admin_panel_instance;
 
     /**
      * Initialize the class
@@ -41,7 +43,8 @@ class Admin
      */
     private function define_classes()
     {
-        $this->menu_instance    = new Menu();
-        $this->metabox_instance = new Metaboxes();
+        $this->menu_instance        = new Menu();
+        $this->metabox_instance     = new Metaboxes();
+        $this->admin_panel_instance = new AdminPanel();
     }
 }

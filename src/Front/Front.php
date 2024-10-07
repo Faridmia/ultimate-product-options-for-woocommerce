@@ -1,14 +1,17 @@
 <?php
 namespace Ultimate\Upow\Front;
+
 use Ultimate\Upow\Traitval\Traitval;
 use Ultimate\Upow\Front\Options\Options;
+use Ultimate\Upow\Front\FlashSale\FlashSale;
+use Ultimate\Upow\Front\General\General;
+use Ultimate\Upow\Front\Backorder\Backorder;
+use Ultimate\Upow\Front\SwatchVariation\SwatchVariation;
 
 /**
  * Class Front
  * 
- * This class uses the Traitval trait to implement singleton functionality and
- * provides methods for initializing the admin menu and other Front-related features
- * within the Ultimate Product Options For WooCommerce plugin.
+ * Handles the front-end functionality for the Ultimate Product Options For WooCommerce plugin.
  */
 class Front
 {
@@ -17,28 +20,66 @@ class Front
     /**
      * @var Options $options_instance An instance of the Options class.
      */
-    public $options_instance;
+    protected $options_instance;
+
+    /**
+     * @var FlashSale $flashsale_instance An instance of the FlashSale class.
+     */
+    protected $flashsale_instance;
+    protected $backorder_instance;
+    protected $swatches_instance;
+
+    
+
+    public function __construct() {
+        add_action('wp_loaded', array($this, 'upow_variation_swatches_init') );
+        
+    }
+
+    public function upow_variation_swatches_init() {
+        $this->swatches_instance    = new SwatchVariation();
+    }
 
     /**
      * Initialize the class
-     * 
-     * This method overrides the initialize method from the Traitval trait.
-     * It sets up the necessary classes and features for the front area.
      */
     protected function initialize()
     {
         $this->init_hooks();
+        add_action('wp_head', [ $this, 'add_generate_custom_css'] );
+        add_action( 'wp_head', [ $this, 'add_custom_css_general_settings'] );
+        add_action( 'wp_head', [ $this, 'add_google_analytics'] );
+        add_action( 'wp_footer', [ $this, 'add_custom_js'] );
     }
 
     /**
      * Initialize Hooks
-     * 
-     * This method initializes the necessary instances and hooks for the class.
-     * Specifically, it obtains the singleton instance of the Options class and
-     * assigns it to the $options_instance property.
      */
     private function init_hooks()
     {
-        $this->options_instance = Options::getInstance();
+        $this->options_instance     = Options::getInstance();
+        $this->flashsale_instance   = FlashSale::getInstance();
+        $this->backorder_instance   = Backorder::getInstance();
+        
+    }
+
+    /**
+     * Add custom CSS to the front-end
+     */
+    public function add_generate_custom_css()
+    {
+        General::getInstance()->add_generate_custom_css();
+    }
+
+    public function add_custom_css_general_settings() {
+        General::getInstance()->add_custom_css();
+    }
+
+    public function add_custom_js() {
+        General::getInstance()->add_custom_js();
+    }
+
+    public function add_google_analytics() {
+        General::getInstance()->add_google_analytics();
     }
 }

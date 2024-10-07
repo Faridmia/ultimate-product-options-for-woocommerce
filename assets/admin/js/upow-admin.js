@@ -45,7 +45,12 @@
     function UpowAddFieldGroup(index) {
         var newFieldGroup = `
             <div class="upow-extra-field-group" data-index="${index}">
+            <div class="upow-extra-field-group-item">
                 <div class="upow-extra-field-group-header">Field Group ${index + 1}</div>
+                <button type="button" class="remove-upow-extra-field-group"><svg width="18" height="18" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.08366 1.73916L8.26116 0.916656L5.00033 4.17749L1.73949 0.916656L0.916992 1.73916L4.17783 4.99999L0.916992 8.26082L1.73949 9.08332L5.00033 5.82249L8.26116 9.08332L9.08366 8.26082L5.82283 4.99999L9.08366 1.73916Z" fill="currentColor"></path>
+                </svg></button>
+                </div>
                 <div class="upow-extra-field-group-body">
                     <p>
                         <label for="upow_product_${index}_field_type">Field Type</label>
@@ -76,7 +81,6 @@
                     </p>
                     <!-- Add hidden fields or other custom fields here -->
                     <input type="hidden" name="upow_product[${index}][hidden_field]" value="">
-                    <button type="button" class="remove-upow-extra-field-group">Remove</button>
                 </div>
             </div>
         `;

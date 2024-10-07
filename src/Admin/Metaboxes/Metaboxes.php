@@ -92,8 +92,12 @@ class Metaboxes
                     <?php if (!empty($upow_product)) {
                         foreach ($upow_product as $index => $field_group) { ?>
                             <div class="upow-extra-field-group" data-index="<?php echo esc_attr($index); ?>">
-                                <div class="upow-extra-field-group-header"><?php echo esc_html__("Field Group", "ultimate-product-options-for-woocommerce"); ?> <?php echo esc_html($index + 1); ?> </div>
-
+                                <div class="upow-extra-field-group-item">
+                                    <div class="upow-extra-field-group-header"><?php echo esc_html__("Field Group", "ultimate-product-options-for-woocommerce"); ?> <?php echo esc_html($index + 1); ?> </div>
+                                    <button type="button" class="remove-upow-extra-field-group"><svg width="18" height="18" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.08366 1.73916L8.26116 0.916656L5.00033 4.17749L1.73949 0.916656L0.916992 1.73916L4.17783 4.99999L0.916992 8.26082L1.73949 9.08332L5.00033 5.82249L8.26116 9.08332L9.08366 8.26082L5.82283 4.99999L9.08366 1.73916Z" fill="currentColor"></path>
+                </svg></button>
+                                </div>
                                 <div class="upow-extra-field-group-body" style="display: none;">
                                     <p>
                                         <label for="upow_product[<?php echo esc_attr($index); ?>][field_type]"><?php echo esc_html__("Field Type", "ultimate-product-options-for-woocommerce"); ?></label>
@@ -110,7 +114,7 @@ class Metaboxes
                                     <p>
                                         <label for="upow_product[<?php echo esc_attr($index); ?>][required]"><?php echo esc_html__("Required", "ultimate-product-options-for-woocommerce"); ?></label>
                                         <label class="upow-label-switch">
-                                            <input type="checkbox" name="upow_product[<?php echo esc_attr($index); ?>][required]" value="1" <?php checked($field_group['required'], '1'); ?>>
+                                        <input type="checkbox" name="upow_product[<?php echo esc_attr($index); ?>][required]" value="1" <?php echo !empty($field_group['required']) ? 'checked' : ''; ?>>
                                             <span class="upow-slider upow-round"></span>
                                         </label>
                                     </p>
@@ -122,7 +126,7 @@ class Metaboxes
                                         <label for="upow_product[<?php echo esc_attr($index); ?>][placeholder_text]"><?php echo esc_html__("Placeholder Text", "ultimate-product-options-for-woocommerce"); ?></label>
                                         <input type="text" name="upow_product[<?php echo esc_attr($index); ?>][placeholder_text]" value="<?php echo esc_attr($field_group['placeholder_text']); ?>">
                                     </p>
-                                    <button type="button" class="remove-upow-extra-field-group"><?php echo esc_html__("Remove", "ultimate-product-options-for-woocommerce"); ?></button>
+                                    
                                 </div>
                             </div>
                     <?php }
@@ -145,37 +149,38 @@ class Metaboxes
      * @param int $post_id The ID of the post being saved.
      * @return int The post ID if the nonce is invalid.
      */
-    public function upow_product_meta_save($post_id)
-    {
-        // Verify nonce
 
-        if ( ! isset( $_POST['upow-metaboxes-nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash ( $_POST['upow-metaboxes-nonce'] ) ) , 'upow-metaboxes-nonce' ) ) {
-            return;
-        }
-
-        // Check autosave
-        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-            return $post_id;
-        }
-
-        // Check permissions
-        $post_type = get_post_type($post_id);
-        if ('upow_product' === $post_type) {
-            if (!current_user_can('edit_post', $post_id)) {
-                return $post_id;
-            }
-        } else {
-            if (!current_user_can('edit_page', $post_id)) {
-                return $post_id;
-            }
-        }
-
-        // Handle multiple instances of upow_product
-        if (isset($_POST['upow_product'])) {
-            $sanitized_data = sanitize_upow_custom_field_items_data( $_POST['upow_product'] );
-            update_post_meta($post_id, 'upow_product', $sanitized_data);
-        } else {
-            delete_post_meta($post_id, 'upow_product');
-        }
-    }
+     public function upow_product_meta_save($post_id)
+     {
+         // Verify nonce
+ 
+         if ( ! isset( $_POST['upow-metaboxes-nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash ( $_POST['upow-metaboxes-nonce'] ) ) , 'upow-metaboxes-nonce' ) ) {
+             return;
+         }
+ 
+         // Check autosave
+         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+             return $post_id;
+         }
+ 
+         // Check permissions
+         $post_type = get_post_type($post_id);
+         if ('upow_product' === $post_type) {
+             if (!current_user_can('edit_post', $post_id)) {
+                 return $post_id;
+             }
+         } else {
+             if (!current_user_can('edit_page', $post_id)) {
+                 return $post_id;
+             }
+         }
+ 
+         // Handle multiple instances of upow_product
+         if (isset($_POST['upow_product'])) {
+             $sanitized_data = sanitize_upow_custom_field_items_data( $_POST['upow_product'] );
+             update_post_meta($post_id, 'upow_product', $sanitized_data);
+         } else {
+             delete_post_meta($post_id, 'upow_product');
+         }
+     }
 }

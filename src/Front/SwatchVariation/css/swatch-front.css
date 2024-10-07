@@ -1,0 +1,356 @@
+.upow-swatch-wrapper {
+    display: flex;
+    gap: 10px;
+}
+
+.upow-swatch-item {
+	position: relative;
+}
+.upow-swatch-item.upow-variations-color,
+.upow-swatch-item.upow-variations-image {
+    display: inline-block;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    width: 30px;
+    height: 30px;
+}
+
+.upow-swatch-item.upow-variations-image {
+	width: 35px;
+	height: 35px;
+	font-size: 0;
+}
+
+.upow-swatch-item.upow-variations-image .upow-variation-tooltip {
+	font-size: 14px;
+}
+
+.upow-swatch-item.upow-variations-image img {
+	border-radius: 4px;
+}
+
+
+.upow-swatch-item.upow-variations-color.selected:after,
+.upow-swatch-item.upow-variations-color.selected:hover:after,
+.upow-swatch-item.upow-variations-image.selected:after,
+.upow-swatch-item.upow-variations-image.selected:hover:after,
+.upow-swatch-item.switch-logo.selected::after,
+.upow-swatch-item.switch-logo.selected:hover::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(100%);
+    height: calc(100%);
+    outline: none;
+    -webkit-backface-visibility: hidden;
+    border-radius: 6px;
+    transition: all 0.12s linear;
+    border: 2px solid #2879fe;
+    transform: translate(-50%, -50%);
+	visibility: visible;
+	opacity: 1;
+}
+
+.upow-swatch-wrapper .upow-variations-label {
+	width: 100%;
+    min-width: 40px;
+    position: relative;
+    padding: 0px 5px;
+    white-space: nowrap;
+    background-color: #eaebed;
+    color: #191919;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.upow-swatch-wrapper .upow-variations-label.selected {
+	background: #4A4A4A !important;
+    color: #FFFFFF !important;
+}
+
+.upow-variation-tooltip {
+    visibility: hidden;
+    min-width: 50px;
+    background-color: rgba(0, 0, 0);
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 0 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    text-transform: capitalize;
+    font-size: 12px;
+    line-height: 28px!important;
+    z-index: 99;
+}
+
+.woocommerce-shop .upow-variations-color .upow-variation-tooltip {
+    padding: 5px 8px;
+}
+
+.upow-variation-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%; /* Bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+}
+
+.upow-swatch-item:hover .upow-variation-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.upow-swatch-item.color-selected {
+    border: 2px solid #000; /* Border for selected item */
+}
+
+.upow-swatch-item:active {
+    transform: scale(1.05);
+}
+
+.upow-selected-color-name ,
+.upow-selected-logo-name {
+	font-size: 16px;
+    text-transform: lowercase;
+    font-weight: 500;
+	margin-left: 5px;
+}
+
+.upow-variation-default-wrapper {
+	display: none;
+}
+
+.woocommerce div.product form.cart .variations td, 
+.woocommerce div.product form.cart .variations th {
+    vertical-align: top!important;
+}
+
+.upow-swatch-item.switch-logo {
+    background-color: #e5e5e5;
+    padding: 0 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    line-height: 28px;
+}
+
+table.variations.upow-variation-form th.label {
+    display: inline-block;
+    margin-right: 5px;
+    min-width: 15%;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+table.variations.upow-variation-form td.value {
+    display: inline-block;
+    text-align: left;
+    vertical-align: top;
+    line-height: normal;
+    background: unset;
+}
+
+table.variations .upow-swatch-item {
+    position: relative;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content; 
+
+}
+
+table.variations .upow-swatch-item.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.7;
+    overflow: hidden;
+}
+
+table.variations .upow-swatch-wrapper.blur .upow-swatch-item.disabled {
+    opacity: 0.3;
+}
+
+table.variations .upow-swatch-wrapper.cross .upow-swatch-item.disabled::before {
+    position: absolute;
+    content: " " !important;
+    width: 100%;
+    height: 1px;
+    background: red !important;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 50%;
+    visibility: visible;
+    opacity: 1;
+    border: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-width: auto;
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    z-index: 0;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+table.variations .upow-swatch-wrapper.cross .upow-swatch-item.disabled::after {
+    position: absolute;
+    content: " " !important;
+    width: 100%;
+    height: 1px;
+    background: red !important;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 50%;
+    visibility: visible;
+    opacity: 1;
+    border: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-width: auto;
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    z-index: 0;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.woocommerce-shop .upow-variation-form tr {
+    text-align: left;
+}
+
+.woocommerce-shop .upow-variation-form tr:last-child {
+    margin-bottom: 0;
+}
+
+span.upow-variation-tooltip.upow-tooltip-image {
+    min-width: 100px;
+    padding: 0;
+}
+
+
+span.upow-variation-tooltip.upow-tooltip-image img,
+.upow-swatch-item.upow-variations-image .upow-tooltip-image img {
+    border-radius: 0;
+}
+
+
+.upow-variation-tooltip.upow-tooltip-image {
+    display: inline-block!important;
+    text-align: center;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border: 2px solid rgba(0, 0, 0);
+    border-radius: 4px;
+    cursor: pointer;
+    width: 120px!important;
+    height: auto!important;
+}
+  
+.upow-variation-tooltip.upow-tooltip-image img {
+    height: auto;
+    display: block;
+}
+  
+.upow-variation-tooltip.upow-tooltip-image .upow-switch-label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: rgba(0, 0, 0);
+    padding: 0px;
+    border-radius: 0;
+}
+
+.upow-variation-form tbody tr td {
+    line-height: unset!important;
+}
+
+.upow-variation-form .reset_variations:focus {
+    outline: none;
+}
+
+.upow-variation-form tbody tr label {
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+  
+.woocommerce table.variations tr td select {
+    outline: none;
+}
+
+.upow-swatch-wrapper.circle .upow-swatch-item {
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.upow-swatch-wrapper.squared .upow-swatch-item,
+.upow-swatch-wrapper.squared .upow-swatch-item.upow-variations-image > img {
+    width: 40px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upow-swatch-wrapper.rounded .upow-swatch-item,
+.upow-swatch-wrapper.rounded .upow-swatch-item.upow-variations-image > img {
+    min-width: 50px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upow-swatch-wrapper.circle .upow-swatch-item.upow-variations-image > img {
+    border-radius: 50%;
+}
+
+.upow-swatch-wrapper.circle .upow-swatch-item.upow-variations-color.selected:before, 
+.upow-swatch-wrapper.circle .upow-swatch-item.upow-variations-color.selected:hover::before, 
+.upow-swatch-wrapper.circle .upow-swatch-item.upow-variations-image.selected:before,
+.upow-swatch-wrapper.circle .upow-swatch-item.upow-variations-image.selected:hover::before, 
+.upow-swatch-wrapper.circle .upow-swatch-item.switch-logo.selected::before {
+    border-radius: 50%;
+}
+
+.upow-swatch-wrapper.circle .upow-swatch-item.upow-variations-color:after, 
+.upow-swatch-wrapper.circle .upow-swatch-item.upow-variations-color:hover:after,
+.upow-swatch-wrapper.circle .upow-swatch-item.upow-variations-image:after, 
+.upow-swatch-wrapper.circle .upow-swatch-item.upow-variations-image:hover:after,
+.upow-swatch-wrapper.circle .upow-swatch-item.switch-logo::after, 
+.upow-swatch-wrapper.circle .upow-swatch-item.switch-logo:hover::after {
+    border-radius: 50%;
+}
+
+.wopb-loop-variations-form .reset_variations:focus {
+    outline: none;
+}
+
+.upow-swatch-wrapper.hide .upow-swatch-item.disabled {
+    display: none;
+}

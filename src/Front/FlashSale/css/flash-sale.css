@@ -1,0 +1,134 @@
+/* ------------------------------------------------------------------------------
+	Global Styles
+-------------------------------------------------------------------------------*/
+/* ------------------------------------------------------------------------------
+	Banner
+-------------------------------------------------------------------------------*/
+
+.upow-flash-sale-banner-text {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+.upow-flash-sale-banner-text h1 {
+	margin: 0;
+	color: #fff;
+	font-weight: 100;
+	font-size: 24px;
+	text-transform: capitalize;
+	letter-spacing: 2px;
+}
+.upow-flash-sale-banner-text p {
+	color: #fff;
+	font-size: 16px;
+	font-weight: 500;
+	margin-bottom: 10px;
+	font-family: arial;
+	margin-top: 0px;
+}
+
+p.upow-flash-sale-offer-title {
+	margin-top: 0;
+}
+
+/* ------------------------------------------------------------------------------
+	Countdown
+-------------------------------------------------------------------------------*/
+
+.upow-flash-sale-countdown {
+	display: flex;
+    align-items: center;
+    gap: 10px;
+	margin-bottom: 15px;
+}
+
+.flash-sale-item {
+	display: inline-block;
+	position: relative;
+	text-align:center;
+	padding: 20px 5px 15px 5px;
+	text-transform:capitalize;
+	font-size: 16px;
+	color: #fff;
+	width: 120px;
+	border-radius: 4px;
+}
+.flash-sale-item p { 
+	text-align:center;
+	font-size: 40px;
+	line-height: 40px!important;
+	padding:0;
+	margin-bottom:0px;
+	margin-top: 0;
+	font-weight: 700;
+}
+
+.upow-flash-sale-countdown .flash-sale-item:nth-child(1){background: rgb(208, 40, 40);}
+.upow-flash-sale-countdown .flash-sale-item:nth-child(2){background: rgb(37, 110, 249);}
+.upow-flash-sale-countdown .flash-sale-item:nth-child(3){background: rgb(38, 175, 38);}
+.upow-flash-sale-countdown .flash-sale-item:nth-child(4){background: rgb(230, 158, 21);}
+
+.upow-flash-sale-offer-title {
+	display: inline-block;
+    font-size: 15px;
+    color: #fff;
+    background-color: #222;
+    padding: 3px 20px;
+    border-radius: 4px;
+}
+.upow-flash-sale-item > div {
+  display: flex;
+  gap: 10px;
+}
+.upow-flash-sale-item .upow-flash-sale-timer-item-number {
+  font-size: 40px;
+  color: #293e9c;
+  font-weight: 900;
+}
+.upow-flash-sale-item .upow-flash-sale-timer-item-title {
+  display: block;
+  color: grey;
+  font-weight: 400;
+  font-size: 18px;
+  text-transform: capitalize;
+}
+
+.cupow-flash-sale-wrapper .upow-flash-sale-item:before {
+  content: "";
+}
+
+.upow-flash-sale-timer-item {
+	margin-top: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.upow-flash-sale-inner-item .upow-flash-sale-timer-item-number {
+	display: inline-block;
+    font-size: 30px;
+    color: #fff;
+	font-weight: 600;
+    background-color: #222;
+    padding: 10px 15px;
+    border-radius: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.countdowncdt_item-title {
+	text-align: left;
+}
+
+.countdowncdt_item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.upow-flash-sale-inner-item .upow-flash-sale-timer-item-title {
+	font-size: 14px!important;
+	color: #222;
+	font-weight: 500;
+}

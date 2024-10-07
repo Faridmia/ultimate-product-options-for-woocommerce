@@ -7,7 +7,7 @@
     --upow-text-color-light: #fff; /* Light text color */
     --upow-text-color-dark: #000; /* Dark text color */
     --upow-button-bg-color-remove: red; /* Background color for remove button */
-    --upow-button-bg-color-add: green; /* Background color for add button */
+    --upow-button-bg-color-add: #2196F3; /* Background color for add button */
     
     /* Padding and Margin Variables */
     --upow-padding-small: 5px;
@@ -27,7 +27,7 @@
   
 
 
-  /* Container for extra field group with border and margin */
+/* Container for extra field group with border and margin */
 .upow-extra-field-group {
     border: 1px solid var(--upow-border-color);
     margin-bottom: var(--upow-margin-medium);
@@ -47,6 +47,8 @@
     padding: var(--upow-padding-large);
     display: none;
   }
+
+ 
   
   /* Labels inside the extra field group with margin */
   .upow-extra-field-group label {
@@ -63,15 +65,21 @@
     padding: var(--upow-padding-medium);
     margin-bottom: var(--upow-margin-medium);
   }
-  
+  .upow-extra-field-group-body label {
+    margin-bottom: 8px!important;
+  }
   /* Remove button with background, text color, border, and padding */
   .upow-extra-field-group button.remove-upow-extra-field-group {
-    background-color: var(--upow-button-bg-color-remove);
-    color: var(--upow-text-color-light);
+    color: var(--upow-button-bg-color-remove);
     border: none;
     padding: var(--upow-padding-small) var(--upow-padding-medium);
     cursor: pointer;
   }
+  .upow-extra-field-group button.remove-upow-extra-field-group:hover {
+    background-color: var(--upow-button-bg-color-remove);
+    color: var(--upow-text-color-light);
+  }
+
   
   /* Add button with background, text color, border, and padding */
   #add-upow-extra-field-group {
@@ -82,6 +90,8 @@
     color: var(--upow-text-color-light);
     border: none;
     cursor: pointer;
+    padding: 7px 12px;
+    border-radius: 4px;
   }
   
   /* Wrapper for extra options with list style and padding reset */
@@ -161,4 +171,30 @@
   .extra-item-group-title {
     margin: var(--upow-margin-large) 0;
     width: var(--upow-width-full);
+  }
+
+  .upow-extra-field-group-item {
+    position: relative;
+  }
+  .upow-extra-field-group-item .remove-upow-extra-field-group {
+      position: absolute;
+      right: 6px;
+      bottom: 5px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      font-size: 20px;
+  }
+ 
+  #upow-term-image-preview {
+    width: 150px;
+    height: 150px;
+      margin-bottom: 20px;
+  }
+  
+  .upow-d-none {
+      display: none;
   }

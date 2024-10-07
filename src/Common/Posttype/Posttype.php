@@ -5,84 +5,95 @@ use Ultimate\Upow\Traitval\Traitval;
 /**
  * Class PostType
  * 
- * This class uses the Traitval trait to implement singleton functionality and
- * provides methods for creating custom post types within the Ultimate Product Options For WooCommerce plugin.
+ * Handles the creation of a custom post type for the Ultimate Product Options For WooCommerce plugin.
  */
 class PostType
 {
     use Traitval;
 
     /**
-     * Initialize the class
-     * 
-     * This method overrides the initialize method from the Traitval trait.
-     * It adds an action to the 'init' hook to create custom post types.
+     * @var string $post_type The name of the custom post type
+     */
+    private $post_type = 'upow_product';
+
+    /**
+     * @var array $labels The labels for the post type
+     */
+    private $labels = [];
+
+    /**
+     * @var array $args The arguments for the post type
+     */
+    private $args = [];
+
+    /**
+     * Initializes the class and creates the custom post type.
      */
     protected function initialize()
     {
-        add_action('init', array($this, 'upow_create_custom_post_type'));
+        $this->set_labels();
+        $this->set_args();
+
+        add_action('init', [$this, 'register_custom_post_type']);
     }
 
     /**
-     * Create a custom post type for Custom Product Data.
-     *
-     * This function registers a custom post type named 'Custom Product Data' with various labels and settings.
-     * It includes configuration for UI visibility, capabilities, and support for specific features.
-     *
-     * @since 1.0.0
-     *
-     * @return void
+     * Sets the labels for the custom post type.
      */
-    function upow_create_custom_post_type()
+    private function set_labels()
     {
-        $labels = array(
-            'name'               => __('Product Extra Data', 'ultimate-product-options-for-woocommerce'),
-            'singular_name'      => __('Product Extra Data', 'ultimate-product-options-for-woocommerce'),
-            'menu_name'          => __('Product Extra Data', 'ultimate-product-options-for-woocommerce'),
-            'name_admin_bar'     => __('Product Extra Data', 'ultimate-product-options-for-woocommerce'),
-            'add_new'            => __('Add New', 'ultimate-product-options-for-woocommerce'),
-            'add_new_item'       => __('Add New Product Data', 'ultimate-product-options-for-woocommerce'),
-            'new_item'           => __('New Product Data', 'ultimate-product-options-for-woocommerce'),
-            'edit_item'          => __('Edit Product Data Group', 'ultimate-product-options-for-woocommerce'),
-            'view_item'          => __('View Product Data', 'ultimate-product-options-for-woocommerce'),
-            'all_items'          => __('All Product Data', 'ultimate-product-options-for-woocommerce'),
-            'search_items'       => __('Search Product Data', 'ultimate-product-options-for-woocommerce'),
-            'not_found'          => __('No product fields found.', 'ultimate-product-options-for-woocommerce'),
-            'not_found_in_trash' => __('No product fields found in Trash.', 'ultimate-product-options-for-woocommerce'),
-        );
+        $this->labels = [
+            'name'                  => __('Product Extra Data', 'ultimate-product-options-for-woocommerce'),
+            'singular_name'         => __('Product Extra Data', 'ultimate-product-options-for-woocommerce'),
+            'menu_name'             => __('Product Extra Data', 'ultimate-product-options-for-woocommerce'),
+            'name_admin_bar'        => __('Product Extra Data', 'ultimate-product-options-for-woocommerce'),
+            'add_new'               => __('Add New', 'ultimate-product-options-for-woocommerce'),
+            'add_new_item'          => __('Add New Product Data', 'ultimate-product-options-for-woocommerce'),
+            'new_item'              => __('New Product Data', 'ultimate-product-options-for-woocommerce'),
+            'edit_item'             => __('Edit Product Data Group', 'ultimate-product-options-for-woocommerce'),
+            'view_item'             => __('View Product Data', 'ultimate-product-options-for-woocommerce'),
+            'all_items'             => __('All Product Data', 'ultimate-product-options-for-woocommerce'),
+            'search_items'          => __('Search Product Data', 'ultimate-product-options-for-woocommerce'),
+            'not_found'             => __('No product fields found.', 'ultimate-product-options-for-woocommerce'),
+            'not_found_in_trash'    => __('No product fields found in Trash.', 'ultimate-product-options-for-woocommerce'),
+        ];
+    }
 
-        $args = array(
-            'labels' => $labels,
-            'public' => true,
+    /**
+     * Sets the arguments for the custom post type.
+     */
+    private function set_args()
+    {
+        $this->args = [
+            'labels'             => $this->labels,
+            'public'             => true,
             'publicly_queryable' => true,
-            'show_ui' => true,
-            'show_in_menu' => false, // We will add it to the WooCommerce menu manually
-            'query_var' => true,
-            'rewrite' => array('slug' => 'upow-product'),
-            'capability_type' => 'post',
-            'has_archive' => true,
-            'hierarchical' => false,
-            'menu_position' => null,
-            'supports' => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'),
-        );
-
-        register_post_type('upow_product', $args);
+            'show_ui'            => true,
+            'show_in_menu'       => false, // Manually added to the WooCommerce menu
+            'query_var'          => true,
+            'rewrite'            => ['slug' => 'upow-product'],
+            'capability_type'    => 'post',
+            'has_archive'        => true,
+            'hierarchical'       => false,
+            'menu_position'      => null,
+            'supports'           => ['title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'],
+        ];
     }
 
     /**
-     * Flush rewrite rules on theme activation.
-     *
-     * This function creates the custom post type and flushes rewrite rules
-     * to ensure the custom post type's rewrite rules are registered and updated properly
-     * when the theme is activated.
-     *
-     * @since 1.0.0
-     *
-     * @return void
+     * Registers the custom post type.
      */
-    function upow_flush_rewrite_rules()
+    public function register_custom_post_type()
     {
-        $this->upow_create_custom_post_type();
+        register_post_type($this->post_type, $this->args);
+    }
+
+    /**
+     * Flushes rewrite rules upon theme activation.
+     */
+    public function flush_rewrite_rules()
+    {
+        $this->register_custom_post_type();
         flush_rewrite_rules();
     }
 }

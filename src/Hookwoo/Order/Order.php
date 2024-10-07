@@ -1,7 +1,5 @@
 <?php
-
 namespace Ultimate\Upow\Hookwoo\Order;
-
 use Ultimate\Upow\Traitval\Traitval;
 
 class Order
@@ -15,7 +13,7 @@ class Order
      */
     public function __construct()
     {
-
+        $this->set_currency_position();
         add_action('woocommerce_admin_order_data_after_order_details', array($this, 'upow_display_price_field_in_admin_order'), 10, 1);
         add_filter('woocommerce_order_item_get_formatted_meta_data', array($this, 'upow_remove_meta_from_order'), 10, 2);
         add_action('woocommerce_after_order_itemmeta', array($this, 'upow_display_field_below_product_title'), 10, 3);
@@ -94,31 +92,6 @@ class Order
     {
         $upow_item_label_text           = wc_get_order_item_meta($item_id, 'upow_item_label_text', true);
         $upow_custom_field_items_data   = wc_get_order_item_meta($item_id, 'upow_custom_field_items_data', true);
-        $currency_position              = get_option('woocommerce_currency_pos');
-        $currency_symbol                = get_woocommerce_currency_symbol();
-
-        // Initialize currency position variables
-        $currency_left = '';
-        $currency_right = '';
-
-        // Determine the position of the currency symbol
-        switch ($currency_position) {
-            case 'left':
-                $currency_left = $currency_symbol;
-                break;
-            case 'right':
-                $currency_right = $currency_symbol;
-                break;
-            case 'left_space':
-                $currency_left = $currency_symbol . '&nbsp;';
-                break;
-            case 'right_space':
-                $currency_right = '&nbsp;' . $currency_symbol;
-                break;
-            default:
-                $currency_left = '';
-                $currency_right = '';
-        }
 
         // Check if the custom field data is an array or an object
         if (is_array($upow_custom_field_items_data) || is_object($upow_custom_field_items_data)) {
@@ -126,7 +99,7 @@ class Order
             foreach ($upow_custom_field_items_data as $key => $value) {
 
                 $formatted_value = number_format((float)$value, 2, '.', '');
-                $extra_fields = $upow_item_label_text[$count] . ' : ' . $currency_left . $formatted_value . $currency_right . '<br/>';
+               $extra_fields = $upow_item_label_text[$count] . ' : ' . $this->currency_left . $formatted_value . $this->currency_right . '<br/>';
                 echo wp_kses_post($extra_fields);
                 $count++;
             }
@@ -185,52 +158,29 @@ class Order
         $upow_item_label_text              = wc_get_order_item_meta($item_id, 'upow_item_label_text', true);
         $upow_custom_field_items_data_price = wc_get_order_item_meta($item_id, 'upow_custom_field_items_data_price', true);
 
-        $currency_position = get_option('woocommerce_currency_pos');
-        $currency_symbol   = get_woocommerce_currency_symbol();
-
-        // Initialize currency position variables
-        $currency_left = '';
-        $currency_right = '';
-
-        // Determine the position of the currency symbol
-        switch ($currency_position) {
-            case 'left':
-                $currency_left = $currency_symbol;
-                break;
-            case 'right':
-                $currency_right = $currency_symbol;
-                break;
-            case 'left_space':
-                $currency_left = $currency_symbol . '&nbsp;';
-                break;
-            case 'right_space':
-                $currency_right = '&nbsp;' . $currency_symbol;
-                break;
-            default:
-                $currency_left = '';
-                $currency_right = '';
+        $upow_enable_extra_options_order_page = '';
+        if (!empty(get_option('upow_enable_extra_options_order_page'))) {
+            $upow_enable_extra_options_order_page = get_option('upow_enable_extra_options_order_page');
         }
 
-
-        $currency_symbol = get_woocommerce_currency_symbol();
-        if (!empty($upow_custom_field_items_data) || !empty($upow_item_label_text)) {
-
-            $count = 0;
-?>
-            <p>
-                <?php
-                foreach ($upow_custom_field_items_data as $key => $value) {
-                    echo  esc_html($upow_item_label_text[$count]) . ': ' . wp_kses_post($currency_left) . esc_html(number_format((float)$value, 2, '.', '')) . wp_kses_post($currency_right) . '<br>';
-                    $count++;
-                }
+        if( $upow_enable_extra_options_order_page == '1' ) {
+            if (!empty($upow_custom_field_items_data) || !empty($upow_item_label_text)) {
+                $count = 0;
                 ?>
-            </p>
-<?php }
+                <p>
+                    <?php
+                    foreach ($upow_custom_field_items_data as $key => $value) {
+                        echo  esc_html($upow_item_label_text[$count]) . ': ' . wp_kses_post($this->currency_left) . esc_html(number_format((float)$value, 2, '.', '')) . wp_kses_post($this->currency_right) . '<br>';
+                        $count++;
+                    }
+                    ?>
+                </p>
+            <?php }
+            if (!empty($upow_custom_field_items_data_price)) {
+                $options_price = sprintf('<p><strong>%s</strong>%s</p>', __('Options Price:', 'ultimate-product-options-for-woocommerce'), wc_price($upow_custom_field_items_data_price));
 
-        if (!empty($upow_custom_field_items_data_price)) {
-            $options_price = sprintf('<p><strong>%s</strong>%s</p>', __('Options Price:', 'ultimate-product-options-for-woocommerce'), wc_price($upow_custom_field_items_data_price));
-
-            echo wp_kses_post($options_price);
+                echo wp_kses_post($options_price);
+            }
         }
     }
 }

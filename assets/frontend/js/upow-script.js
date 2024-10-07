@@ -6,31 +6,35 @@
 
         var variable_price = $('.single_variation_wrap .woocommerce-variation .woocommerce-variation-price .woocommerce-Price-amount bdi');
         var salePriceElement2 = '';
-        var productId = upow_localize_product_obj.productId;
-        if( !variable_price.length > 0 ) {
-            var salePriceElement2 = $('[data-is-descendent-of-single-product-template="true"] ins .woocommerce-Price-amount bdi').first();
-            if( !salePriceElement2.length > 0 ) {
-                
-               salePriceElement2 = $("#product-"+productId+" ins .woocommerce-Price-amount").first();
-            }
 
-            if( !salePriceElement2.length > 0 ) {
-               var salePriceElement2 = $("#product-"+productId+" .woocommerce-Price-amount").first();
+        if (typeof upow_localize_product_obj !== 'undefined') {
+
+            var productId = upow_localize_product_obj.productId;
+            if( !variable_price.length > 0 ) {
+                var salePriceElement2 = $('[data-is-descendent-of-single-product-template="true"] ins .woocommerce-Price-amount bdi').first();
+                if( !salePriceElement2.length > 0 ) {
+                    
+                salePriceElement2 = $("#product-"+productId+" ins .woocommerce-Price-amount").first();
+                }
+
+                if( !salePriceElement2.length > 0 ) {
+                var salePriceElement2 = $("#product-"+productId+" .woocommerce-Price-amount").first();
+                }
             }
-        }
-        
-        if (salePriceElement2.length > 0) {
-            return parseFloat(salePriceElement2.text().replace(/[^0-9.-]+/g, ""));
-        } else if(variable_price.length > 0) {
-           return parseFloat(variable_price.first().text().replace(/[^0-9.-]+/g, ""));
-        }
-        else {
-            var priceElement = $('[data-is-descendent-of-single-product-template="true"] .woocommerce-Price-amount bdi').first();
-            if(!priceElement.length > 0 ) {
-                var priceElement = $('#product-"+productId+" ins .woocommerce-Price-amount bdi').first();
+            
+            if (salePriceElement2.length > 0) {
+                return parseFloat(salePriceElement2.text().replace(/[^0-9.-]+/g, ""));
+            } else if(variable_price.length > 0) {
+            return parseFloat(variable_price.first().text().replace(/[^0-9.-]+/g, ""));
             }
-            return parseFloat(priceElement.text().replace(/[^0-9.-]+/g, ""));
-           
+            else {
+                var priceElement = $('[data-is-descendent-of-single-product-template="true"] .woocommerce-Price-amount bdi').first();
+                if(!priceElement.length > 0 ) {
+                    var priceElement = $("#product-"+productId+" ins .woocommerce-Price-amount bdi").first();
+                }
+                return parseFloat(priceElement.text().replace(/[^0-9.-]+/g, ""));
+            
+            }
         }
 
     }

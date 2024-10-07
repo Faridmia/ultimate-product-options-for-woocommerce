@@ -1,7 +1,5 @@
 <?php
-
 namespace Ultimate\Upow\Hookwoo\Cart;
-
 use Ultimate\Upow\Traitval\Traitval;
 
 class Cart
@@ -19,6 +17,8 @@ class Cart
         add_action('woocommerce_before_calculate_totals', array($this, 'upow_adjust_cart_item_price'), 10, 1);
         add_filter('woocommerce_get_cart_item_from_session', array($this, 'upow_get_cart_items_from_session'), 10, 2);
         add_filter('woocommerce_get_item_data', array($this, 'upow_display_custom_fields_in_cart'), 10, 2);
+
+        $this->set_currency_position();
     }
 
 
@@ -63,48 +63,65 @@ class Cart
         if (isset($cart_item['upow_custom_field_items_data']) || isset($cart_item['upow_item_label_text'])) {
 
             $item_label_text   = $cart_item['upow_item_label_text'];
-            $currency_position = get_option('woocommerce_currency_pos');
-            $currency_symbol   = get_woocommerce_currency_symbol();
-            // Initialize currency position variables
-            $currency_left  = '';
-            $currency_right = '';
-
-            // Determine the position of the currency symbol
-            switch ($currency_position) {
-                case 'left':
-                    $currency_left = $currency_symbol;
-                    break;
-                case 'right':
-                    $currency_right = $currency_symbol;
-                    break;
-                case 'left_space':
-                    $currency_left = $currency_symbol . '&nbsp;';
-                    break;
-                case 'right_space':
-                    $currency_right = '&nbsp;' . $currency_symbol;
-                    break;
-                default:
-                    $currency_left = '';
-                    $currency_right = '';
-            }
 
             $count = 0;
+            $upow_show_customer_cart_page = '';
+            if (!empty(get_option('upow_show_customer_cart_page' ))) {
+                $upow_show_customer_cart_page = get_option('upow_show_customer_cart_page' );
+            }
+            $upow_enable_extra_options_checkout_page = '';
+            if (!empty(get_option('upow_enable_extra_options_checkout_page',false ))) {
+                $upow_enable_extra_options_checkout_page = get_option('upow_enable_extra_options_checkout_page');
+            }
 
-            foreach ($cart_item['upow_custom_field_items_data'] as $key => $values) {
-                if (is_array($values)) {
-                    foreach ($values as $value) {
-                        $item_data[] = array(
+            if( $upow_show_customer_cart_page == '1' || $upow_enable_extra_options_checkout_page == '1' ) {
+
+                foreach ($cart_item['upow_custom_field_items_data'] as $key => $values) {
+                   
+                    if (is_array($values)) {
+                        foreach ($values as $value) {
+                            
+                            if( $upow_show_customer_cart_page == '1' && $upow_enable_extra_options_checkout_page == '1' ) {
+                                $item_data[] = array(
+                                'name' => wc_clean($item_label_text[$count]),
+                                'value' => $this->currency_left . wc_clean(number_format((float)$value, 2, '.', '')) . $this->currency_right
+                                );
+                            }
+                            elseif( $upow_show_customer_cart_page == '1' && is_cart() ) {
+                                $item_data[] = array(
+                                    'name' => wc_clean($item_label_text[$count]),
+                                    'value' => $this->currency_left . wc_clean(number_format((float)$value, 2, '.', '')) . $this->currency_right
+                                );
+                            }
+                            elseif( $upow_enable_extra_options_checkout_page == '1' && is_checkout() ) {
+                                $item_data[] = array(
+                                    'name' => wc_clean($item_label_text[$count]),
+                                    'value' => $this->currency_left . wc_clean(number_format((float)$value, 2, '.', '')) . $this->currency_right
+                                );
+                            }
+                        }
+                    } else {
+                        if( $upow_show_customer_cart_page == '1' && $upow_enable_extra_options_checkout_page == '1' ) {
+                            $item_data[] = array(
                             'name' => wc_clean($item_label_text[$count]),
-                            'value' => $currency_left . wc_clean(number_format((float)$value, 2, '.', '')) . $currency_right
-                        );
+                            'value' => $this->currency_left . wc_clean(number_format((float)$values, 2, '.', '')) . $this->currency_right
+                            );
+                        }
+                        elseif( $upow_show_customer_cart_page == '1' && is_cart() ) {
+                            $item_data[] = array(
+                                'name' => wc_clean($item_label_text[$count]),
+                                'value' => $this->currency_left . wc_clean(number_format((float)$values, 2, '.', '')) . $this->currency_right
+                            );
+                        }
+                        elseif( $upow_enable_extra_options_checkout_page == '1' && is_checkout() ) {
+                            $item_data[] = array(
+                                'name' => wc_clean($item_label_text[$count]),
+                                'value' => $this->currency_left . wc_clean(number_format((float)$values, 2, '.', '')) . $this->currency_right
+                            );
+                        }
                     }
-                } else {
-                    $item_data[] = array(
-                        'name' => wc_clean($item_label_text[$count]),
-                        'value' => $currency_left . wc_clean(number_format((float)$values, 2, '.', '')) . $currency_right
-                    );
+                    $count++;
                 }
-                $count++;
             }
         }
 

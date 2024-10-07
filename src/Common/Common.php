@@ -39,4 +39,5 @@ class Common
     {
         $this->posttypes_instance = Posttype::getInstance();
     }
+
 }
