@@ -6,6 +6,7 @@ use Ultimate\Upow\Front\Options\Options;
 use Ultimate\Upow\Front\FlashSale\FlashSale;
 use Ultimate\Upow\Front\General\General;
 use Ultimate\Upow\Front\Backorder\Backorder;
+use Ultimate\Upow\Front\Preorder\Preorder;
 use Ultimate\Upow\Front\SwatchVariation\SwatchVariation;
 
 /**
@@ -28,17 +29,7 @@ class Front
     protected $flashsale_instance;
     protected $backorder_instance;
     protected $swatches_instance;
-
-    
-
-    public function __construct() {
-        add_action('wp_loaded', array($this, 'upow_variation_swatches_init') );
-        
-    }
-
-    public function upow_variation_swatches_init() {
-        $this->swatches_instance    = new SwatchVariation();
-    }
+    protected $preorder_instance;
 
     /**
      * Initialize the class
@@ -60,6 +51,8 @@ class Front
         $this->options_instance     = Options::getInstance();
         $this->flashsale_instance   = FlashSale::getInstance();
         $this->backorder_instance   = Backorder::getInstance();
+        $this->swatches_instance    = SwatchVariation::getInstance();
+        $this->preorder_instance    = Preorder::getInstance();
         
     }
 
