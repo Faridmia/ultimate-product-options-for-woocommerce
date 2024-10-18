@@ -23,7 +23,6 @@ class Backorder
 
         add_action( 'woocommerce_product_options_inventory_product_data', [$this,'add_custom_backorder_fields' ]);
         add_action( 'woocommerce_admin_process_product_object', [$this,'save_custom_backorder_fields'] );
-        add_filter( 'woocommerce_product_single_add_to_cart_text', [$this,'change_add_to_cart_single_prod'], 10, 2 );
         add_filter( 'woocommerce_get_availability_text', [$this,'filter_product_availability_text'], 10, 2 );
         add_filter( 'woocommerce_get_item_data', [ $this, 'render_backorder_availability_cart_page' ], 99, 2 );
         add_filter( 'woocommerce_add_to_cart_validation', [ $this,'check_backorder_limit'], 55, 4 );
@@ -105,16 +104,6 @@ class Backorder
         if ( isset( $_POST['_upow_availability_message'] ) ) {
             $product->update_meta_data( '_upow_availability_message', sanitize_text_field( $_POST['_upow_availability_message'] ) );
         }
-    }
-    
-    // Change the Add to Cart button text for backorder products
-    function change_add_to_cart_single_prod( $text, $product ){
-
-        $upow_backorder_addto_cart_text = get_option( 'upow_backorder_addto_cart_text', true );
-        if ( $product->is_on_backorder( 1 ) ) {
-            return $upow_backorder_addto_cart_text;
-        }
-        return __( 'Add to cart', 'ultimate-product-options-for-woocommerce' );
     }
 
     
@@ -292,11 +281,14 @@ class Backorder
     }
 
     public function is_backorder_limit_exceeded( $product, $product_id, $variation_id = '' ) {
-        $backorder_limit = $product->get_meta( '_upow_available_quantity' );
-        $already_backordered_qty = $this->get_total_qty_already_backordered( $product_id, $variation_id );
-    
-        if ( $already_backordered_qty >= $backorder_limit ) {
-            return true;
+
+        if ( $product->is_on_backorder() ) {
+            $backorder_limit = $product->get_meta( '_upow_available_quantity' );
+            $already_backordered_qty = $this->get_total_qty_already_backordered( $product_id, $variation_id );
+        
+            if ( $already_backordered_qty >= $backorder_limit ) {
+                return true;
+            }
         }
     
         return false;
@@ -306,12 +298,13 @@ class Backorder
     public function prevent_adding_to_cart_if_backorder_limit_exceeded( $passed, $product_id ) {
 
         $product = wc_get_product( $product_id );
-        
-        if ( $product->get_stock_quantity() <= 0 ) {
-            $variation_id = ''; // or set it if you're dealing with variations
-            if ( $this->is_backorder_limit_exceeded( $product, $product_id, $variation_id ) ) {
-                wc_add_notice( __( 'Backorder limit exceeded for this product!', 'ultimate-product-options-for-woocommerce' ), 'error' );
-                return false;
+        if ( $product->is_on_backorder() ) {
+            if ( $product->get_stock_quantity() <= 0 ) {
+                $variation_id = ''; // or set it if you're dealing with variations
+                if ( $this->is_backorder_limit_exceeded( $product, $product_id, $variation_id ) ) {
+                    wc_add_notice( __( 'Backorder limit exceeded for this product!', 'ultimate-product-options-for-woocommerce' ), 'error' );
+                    return false;
+                }
             }
         }
         

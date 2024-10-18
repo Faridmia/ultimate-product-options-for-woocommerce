@@ -4,6 +4,7 @@ use Ultimate\Upow\Admin\Menu\Menu;
 use Ultimate\Upow\Admin\Metaboxes\Metaboxes;
 use Ultimate\Upow\Traitval\Traitval;
 use Ultimate\Upow\Admin\AdminPanel\AdminPanel;
+use Ultimate\Upow\Admin\Preorder\Preorder;
 
 /**
  * Class Admin
@@ -22,6 +23,7 @@ class Admin
     protected $menu_instance;
     protected $metabox_instance;
     protected $admin_panel_instance;
+    protected $preorder_instance;
 
     /**
      * Initialize the class
@@ -46,5 +48,6 @@ class Admin
         $this->menu_instance        = new Menu();
         $this->metabox_instance     = new Metaboxes();
         $this->admin_panel_instance = new AdminPanel();
+        $this->preorder_instance    = new Preorder();
     }
 }

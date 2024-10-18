@@ -45,6 +45,9 @@ Monitor and analyze your store’s performance effortlessly with built-in Google
 **Product Extra Field Addon: Unlock Ultimate Customization for WooCommerce**
 Elevate your WooCommerce store with the Product Extra Field Addon, offering unlimited customization options for your products. Add diverse field types like text, dropdowns, checkboxes, and more, tailored to your store's needs. Set unique prices for each field, change styles—including accordion view—and apply fields globally or exclude specific products. Easily toggle features on/off and display custom fields on both the cart and checkout pages, enhancing the shopping experience and increasing conversions. This feature empowers you to provide a personalized shopping journey, driving customer engagement and boosting sales for your online store.
 
+**Variation Swatches**
+The Variation Swatches for WooCommerce Addon transforms product variations into color, image, and label swatches. This allows shoppers to easily select the right product variations, such as colors or sizes, enhancing the shopping experience and improving conversions.
+
 == Requirements ==
 
 `WordPress version at least: 6.4` 

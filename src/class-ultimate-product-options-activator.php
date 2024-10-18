@@ -43,6 +43,7 @@ class Upow_Activator
 		update_option('upow_show_customer_cart_page', 1);
 		update_option('upow_enable_extra_options_order_page', 1);
 		update_option('upow_backorder_on_off', 0);
+		update_option('upow_preorder_on_off', 0);
 		update_option('upow_show_countdown_single_page', 1);
 		update_option('upow_enable_flash_sale_here', 0);
 		update_option('upow_override_saleflash', 0);

@@ -18,9 +18,9 @@ class FlashSale
 
     public function enqueue_flash_sale_assets()
     {
-        // wp_enqueue_style('upow-flashsale-css', UPOW_CORE_ASSETS . 'src/Front/FlashSale/css/flash-sale.css', [], UPOW_VERSION);
-        // wp_enqueue_script('jquery-countdown-min-js', UPOW_CORE_ASSETS . 'src/Front/FlashSale/js/jquery.countdown.js', ['jquery'], UPOW_VERSION, true);
-        // wp_enqueue_script('upow-flashsale-script', UPOW_CORE_ASSETS . 'src/Front/FlashSale/js/countdown.js', ['jquery'], UPOW_VERSION, true);
+        wp_enqueue_style('upow-flashsale-css', UPOW_CORE_ASSETS . 'src/Front/FlashSale/css/flash-sale.css', [], UPOW_VERSION);
+        wp_enqueue_script('jquery-countdown-min-js', UPOW_CORE_ASSETS . 'src/Front/FlashSale/js/jquery.countdown.js', ['jquery'], UPOW_VERSION, true);
+        wp_enqueue_script('upow-flashsale-script', UPOW_CORE_ASSETS . 'src/Front/FlashSale/js/countdown.js', ['jquery'], UPOW_VERSION, true);
     }
 
     public function render_countdown()

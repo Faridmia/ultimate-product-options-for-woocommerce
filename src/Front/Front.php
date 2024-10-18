@@ -48,11 +48,11 @@ class Front
      */
     private function init_hooks()
     {
-        $this->options_instance     = Options::getInstance();
-        $this->flashsale_instance   = FlashSale::getInstance();
-        $this->backorder_instance   = Backorder::getInstance();
-        $this->swatches_instance    = SwatchVariation::getInstance();
-        $this->preorder_instance    = Preorder::getInstance();
+       $this->options_instance     = Options::getInstance();
+       $this->flashsale_instance   = FlashSale::getInstance();
+       $this->backorder_instance   = Backorder::getInstance();
+       $this->swatches_instance    = SwatchVariation::getInstance();
+       $this->preorder_instance    = Preorder::getInstance();
         
     }
 

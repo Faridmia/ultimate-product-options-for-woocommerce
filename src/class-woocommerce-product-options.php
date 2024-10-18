@@ -65,10 +65,10 @@ final class UpowWooProductOptions
     {
 
         // Enqueue frontend CSS
-        // wp_enqueue_style('upow-front-css', UPOW_CORE_ASSETS . 'assets/frontend/css/upow-front.css', array(), UPOW_VERSION);
+        wp_enqueue_style('upow-front-css', UPOW_CORE_ASSETS . 'assets/frontend/css/upow-front.css', array(), UPOW_VERSION  );
 
         // // Enqueue frontend JS
-        // wp_enqueue_script('upow-frontend-script', UPOW_CORE_ASSETS . 'assets/frontend/js/upow-script.js', array('jquery'), UPOW_VERSION, true);
+        wp_enqueue_script('upow-frontend-script', UPOW_CORE_ASSETS . 'assets/frontend/js/upow-script.js', array('jquery'), UPOW_VERSION, true);
 
         // Get WooCommerce currency settings
         $currency_symbol    = get_woocommerce_currency_symbol();
@@ -117,6 +117,7 @@ final class UpowWooProductOptions
             wp_enqueue_script('admin-ajax-script', UPOW_CORE_ASSETS . 'assets/admin/js/admin-ajax-script.js', array('jquery'), UPOW_VERSION, true);
             wp_enqueue_script('upow-wow-settings-admin', UPOW_CORE_ASSETS . 'assets/admin/js/wow-settings-admin.js', array('jquery','wp-color-picker'), UPOW_VERSION, true);
             wp_enqueue_script('upow-flashsale-js', UPOW_CORE_ASSETS . 'assets/admin/js/flashsale.js', array('jquery'), UPOW_VERSION, true);
+            wp_enqueue_script('upow-backorder-js', UPOW_CORE_ASSETS . 'assets/admin/js/backorder.js', array('jquery'), UPOW_VERSION, true);
 
             $data_to_pass = array(
                 'ajax_url' => admin_url('admin-ajax.php'),
@@ -174,17 +175,19 @@ final class UpowWooProductOptions
      *
      * @return void
      */
-    public function init_plugin()
-    {
-        self::$instance           = self::getInstance();
-        
-        if ( class_exists( 'WooCommerce' ) ) {
-            self::$instance->common   = Common::getInstance();
-            self::$instance->front    = Front::getInstance();
-            self::$instance->hookwoo  = HookWoo::getInstance();
 
-            if (is_admin()) {
-                self::$instance->admin = Admin::getInstance();
+    public function init_plugin() {
+        if (is_null(self::$instance)) {
+            self::$instance = self::getInstance();
+    
+            if (class_exists('WooCommerce')) {
+                self::$instance->common  = Common::getInstance();
+                self::$instance->front   = Front::getInstance();
+                self::$instance->hookwoo = HookWoo::getInstance();
+    
+                if (is_admin()) {
+                    self::$instance->admin = Admin::getInstance();
+                }
             }
         }
     }

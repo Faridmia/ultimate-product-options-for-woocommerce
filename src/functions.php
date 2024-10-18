@@ -73,15 +73,24 @@ function sanitize_upow_custom_field_items_data($data)
     if (is_array($data)) {
         foreach ($data as $key => $value) {
             $sanitized_key = sanitize_key($key);
-            $sanitized_value = array_map('sanitize_text_field', $value);
+
+            // Check if $value is an array before using array_map
+            if (is_array($value)) {
+                $sanitized_value = array_map('sanitize_text_field', $value);
+            } else {
+                $sanitized_value = sanitize_text_field($value);
+            }
+
             $sanitized_data[$sanitized_key] = $sanitized_value;
         }
     } else {
+        // Sanitize non-array data
         $sanitized_data = sanitize_text_field($data);
     }
 
     return $sanitized_data;
 }
+
 
 // product per page
 function upow_product_per_page( $products ) {
@@ -277,3 +286,28 @@ function upow_custom_cart_hook( $cart_html, $product, $args ) {
 
     return $before . $cart_html . $after;
 }
+
+
+function upow_change_add_to_cart_text( $text, $product ) {
+    // Get the custom Add to Cart texts for both backorder and preorder
+    $upow_backorder_addto_cart_text = get_option( 'upow_backorder_addto_cart_text', true );
+    $upow_preorder_addto_cart_text  = get_option( 'upow_preorder_addto_cart_text', true );
+    
+    // Check if the product is on backorder
+    if ( $product->is_on_backorder( 1 ) ) {
+        return $upow_backorder_addto_cart_text;
+    }
+    
+    // Check if the product is on preorder
+    $is_preorder = get_post_meta( $product->get_id(), '_upow_preorder_sample', true );
+    if ( $is_preorder == 'yes' ) {
+        return $upow_preorder_addto_cart_text;
+    }
+    
+    // Default to 'Add to cart'
+    return __( 'Add to cart', 'ultimate-product-options-for-woocommerce' );
+}
+
+// Apply the combined function to both single product and shop page
+add_filter( 'woocommerce_product_single_add_to_cart_text', 'upow_change_add_to_cart_text', 20, 2 );
+add_filter( 'woocommerce_product_add_to_cart_text', 'upow_change_add_to_cart_text', 20, 2 );

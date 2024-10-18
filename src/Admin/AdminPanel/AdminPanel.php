@@ -4,6 +4,7 @@ use Ultimate\Upow\Admin\AdminPanel\Settings\ExtraFieldsSettings;
 use Ultimate\Upow\Admin\AdminPanel\Settings\FlashSaleSettings;
 use Ultimate\Upow\Admin\AdminPanel\Settings\GeneralSettings;
 use Ultimate\Upow\Admin\AdminPanel\Settings\Backorder;
+use Ultimate\Upow\Admin\AdminPanel\Settings\Preorder;
 use Ultimate\Upow\Admin\AdminPanel\Settings\SwatchVariations;
 use Ultimate\Upow\Admin\Ajax\CommonAjax;
 use Ultimate\Upow\Admin\Ajax\FlashSaleAjax;
@@ -11,6 +12,7 @@ use Ultimate\Upow\Admin\Ajax\GeneralTabAjax;
 use Ultimate\Upow\Admin\Ajax\ProductOptionsAjax;
 use Ultimate\Upow\Admin\Ajax\BackorderAjax;
 use Ultimate\Upow\Admin\Ajax\SwatchVariationAjax;
+use Ultimate\Upow\Admin\Ajax\PreorderAjax;
 
 /**
  * Class Admin
@@ -30,6 +32,7 @@ class AdminPanel {
     protected $CommonAjax;
     protected $BackorderAjax;
     protected $SwatchVariationAjax;
+    protected $PreorderAjax;
     /**
      * Initialize the class
      *
@@ -45,6 +48,7 @@ class AdminPanel {
         $this->CommonAjax = new CommonAjax();
         $this->BackorderAjax = new BackorderAjax();
         $this->SwatchVariationAjax = new SwatchVariationAjax();
+        $this->PreorderAjax = new PreorderAjax();
 
         $this->initialize_hooks();
     }
@@ -90,6 +94,10 @@ class AdminPanel {
         add_action( 'wp_ajax_upow_backorder_options_fields_save_options', array( $this->BackorderAjax, 'upow_backorder_options_fields_save_options' ) );
         add_action( 'wp_ajax_nopriv_upow_backorder_options_fields_save_options', array( $this->BackorderAjax, 'upow_backorder_options_fields_save_options' ) );
 
+        // preorder ajax
+        add_action( 'wp_ajax_upow_preorder_options_fields_save_options', array( $this->PreorderAjax, 'upow_preorder_options_fields_save_options' ) );
+        add_action( 'wp_ajax_nopriv_upow_preorder_options_fields_save_options', array( $this->PreorderAjax, 'upow_preorder_options_fields_save_options' ) );
+
     }
 
     public function upow_after_add_option_callback() {
@@ -99,5 +107,6 @@ class AdminPanel {
         ExtraFieldsSettings::getInstance()->upow_extra_fields_backend();
         Backorder::getInstance()->upow_backorder_fields_backend();
         SwatchVariations::getInstance()->upow_swatchvariations_fields_backend();
+        Preorder::getInstance()->upow_preorder_fields_backend();
     }
 }

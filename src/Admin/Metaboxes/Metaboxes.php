@@ -102,7 +102,7 @@ class Metaboxes
                                     <p>
                                         <label for="upow_product[<?php echo esc_attr($index); ?>][field_type]"><?php echo esc_html__("Field Type", "ultimate-product-options-for-woocommerce"); ?></label>
                                         <select name="upow_product[<?php echo esc_attr($index); ?>][field_type]">
-                                            <option value="text" <?php selected($field_group['field_type'], 'input'); ?>><?php echo esc_html__("Input", "ultimate-product-options-for-woocommerce"); ?></option>
+                                            <option value="text" <?php selected($field_group['field_type'], 'text'); ?>><?php echo esc_html__("Input", "ultimate-product-options-for-woocommerce"); ?></option>
                                             <option value="radio" <?php selected($field_group['field_type'], 'radio'); ?>><?php echo esc_html__("Radio", "ultimate-product-options-for-woocommerce"); ?></option>
                                             <option value="checkbox" <?php selected($field_group['field_type'], 'checkbox'); ?>><?php echo esc_html__("Checkbox", "ultimate-product-options-for-woocommerce"); ?></option>
                                         </select>
@@ -134,6 +134,7 @@ class Metaboxes
                 </div>
                 <button type="button" id="add-upow-extra-field-group"><?php echo esc_html__("Add More Fields", "ultimate-product-options-for-woocommerce"); ?></button>
             </div>
+        </div>
     <?php
     }
 

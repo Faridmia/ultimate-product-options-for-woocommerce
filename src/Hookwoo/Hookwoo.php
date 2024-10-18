@@ -41,7 +41,7 @@ class Hookwoo
      */
     public function include_hooks()
     {
-        $this->cart_instance    = new Cart();
-        $this->order_instance   = new Order();
+       $this->cart_instance    = new Cart();
+       $this->order_instance   = new Order();
     }
 }
