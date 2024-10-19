@@ -26,6 +26,7 @@ class Preorder
         foreach ($options as $key => $default) {
             $this->options[$key] = get_option($key, $default);
         }
+
     }
 
 

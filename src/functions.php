@@ -289,18 +289,22 @@ function upow_custom_cart_hook( $cart_html, $product, $args ) {
 
 
 function upow_change_add_to_cart_text( $text, $product ) {
+    
     // Get the custom Add to Cart texts for both backorder and preorder
     $upow_backorder_addto_cart_text = get_option( 'upow_backorder_addto_cart_text', true );
     $upow_preorder_addto_cart_text  = get_option( 'upow_preorder_addto_cart_text', true );
+
+    $upow_preorder_on_off = get_option('upow_preorder_on_off',true);
+    $upow_backorder_on_off = get_option('upow_backorder_on_off',true);
     
     // Check if the product is on backorder
-    if ( $product->is_on_backorder( 1 ) ) {
+    if ( $product->is_on_backorder( 1 ) && $upow_backorder_on_off == '1') {
         return $upow_backorder_addto_cart_text;
     }
     
     // Check if the product is on preorder
     $is_preorder = get_post_meta( $product->get_id(), '_upow_preorder_sample', true );
-    if ( $is_preorder == 'yes' ) {
+    if ( $is_preorder == 'yes' &&  $upow_preorder_on_off == 1 ) {
         return $upow_preorder_addto_cart_text;
     }
     
