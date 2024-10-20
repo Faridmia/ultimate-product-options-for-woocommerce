@@ -27,16 +27,25 @@ class PriceOverride {
         add_filter( 'woocommerce_product_variation_get_sale_price', array( $this, 'get_variable_product_price_html' ), 10, 2 );
         add_filter( 'woocommerce_variation_prices_price', array( $this, 'get_variable_product_price_html' ), 10, 2 );
         add_filter( 'woocommerce_variation_prices_sale_price', array( $this, 'get_variable_product_price_html' ), 10, 2 );
-
         add_filter('woocommerce_get_price_html', array($this, 'modify_price_for_preorder_variation' ), 10, 2);
         add_filter( 'woocommerce_variable_get_price_html', array( $this, 'modify_price_for_preorder_variation' ), 10, 2 );
         
     }
 
+    /**
+     * Modifies the price HTML for pre-order products based on their pre-order pricing settings.
+     *
+     * This function checks if a product is a simple product or a variation and whether pre-order 
+     * is enabled. If pre-order pricing is set, it calculates and formats the price according to 
+     * the specified management strategy (fixed, decrease, or increase).
+     *
+     * @param string $price_html The original price HTML to be modified.
+     * @param WC_Product $product The product object for which the price is being modified.
+     * @return string The modified price HTML reflecting pre-order pricing.
+     */
+    public function modify_price_for_preorder_variation( $price_html, $product ) {
 
-    function modify_price_for_preorder_variation( $price_html, $product ) {
-
-        $get_id    = $product->get_id();
+        $get_id                  = $product->get_id();
         $preorder_price          = get_post_meta( $get_id, '_upow_preorder_amount', true );
         $manage_price            = get_post_meta( $get_id, '_upow_preorder_manage_price', true );
         $discount_type           = get_post_meta( $get_id, '_upow_preorder_amount_type', true );
@@ -69,7 +78,19 @@ class PriceOverride {
         return $price_html;
     }
 
-    
+
+    /**
+     * Retrieves and modifies the price HTML for variable products that are available for pre-order.
+     *
+     * This function checks if the product variation has a regular price set and if pre-order 
+     * is enabled. It then calculates the appropriate price based on the management strategy 
+     * (fixed, decrease, or increase) for pre-orders. The function includes a static flag to 
+     * prevent recursive price calculations.
+     *
+     * @param string $price The original price HTML of the product.
+     * @param WC_Product_Variation $product The variable product object for which the price is being retrieved.
+     * @return string The modified price HTML reflecting pre-order pricing, or the original price if conditions are not met.
+     */
     public function get_variable_product_price_html( $price, $product ) {
         // Check if we are already calculating the price to prevent loops
         static $processing = false;
@@ -117,6 +138,18 @@ class PriceOverride {
     
         return $price;
     }
+
+    /**
+     * Calculates the adjusted price of a product based on a specified discount type and operation (increase or decrease).
+     *
+     * @param WC_Product $product The product object.
+     * @param float $regular_price The regular price of the product.
+     * @param float $sale_price The current sale price of the product, if applicable.
+     * @param float $preorder_price The discount or markup amount to apply.
+     * @param string $discount_type The type of discount ('fixed_amount' or 'percentage').
+     * @param string $operation The operation to perform ('increase' or 'decrease').
+     * @return float The final calculated price after applying the discount or markup.
+     */
     
     private function calculate_discounted_price( $product, $regular_price, $sale_price, $preorder_price, $discount_type, $operation ) {
         $base_price = $product->is_on_sale() ? $sale_price : $regular_price;

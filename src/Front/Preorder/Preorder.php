@@ -17,9 +17,9 @@ class Preorder
     public function __construct() {
 
        
-        $this->preorder_enable = get_option('upow_preorder_on_off',true);
+        $this->preorder_enable = get_option( 'upow_preorder_on_off', true );
 
-        if( $this->preorder_enable != 1) {
+        if( $this->preorder_enable != 1 ) {
             return;
         }
 
@@ -49,12 +49,12 @@ class Preorder
         add_filter( 'posts_clauses',  [ $this, 'upow_filter_pre_order_product'], 10, 2 );
         add_filter( 'the_posts', [ $this, 'upow_filter_pre_order_prouduct_variable' ], 10, 2 );
 
-        add_action( 'woocommerce_after_order_itemmeta', array($this,'pre_order_add_text_order_detail_admin'), 10, 3 );
+        add_action( 'woocommerce_after_order_itemmeta', [ $this,'pre_order_add_text_order_detail_admin' ], 10, 3 );
 
         // Add custom column for Pre-Order Dates
-        add_filter('manage_edit-product_columns', [$this, 'add_preorder_date_column'], 99);
+        add_filter('manage_edit-product_columns', [ $this, 'add_preorder_date_column'], 99);
         // Populate the custom column
-        add_action('manage_product_posts_custom_column', [$this, 'populate_preorder_date_column'], 10, 2);
+        add_action('manage_product_posts_custom_column', [ $this, 'populate_preorder_date_column' ], 10, 2 );
 
         $this->preorder_price = new PriceOverride();
 
@@ -81,65 +81,60 @@ class Preorder
                 'ajax_url' => admin_url('admin-ajax.php'),
                 'preordrDefaultAddToCartText' => __( 'Add to cart', 'ultimate-product-options-for-woocommerce' )
             ));
-
         }
         
     }
 
-    
-    function upow_display_preorder_info( $product ) {
+    /**
+     * Displays pre-order information for a given WooCommerce product.
+     *
+     * Retrieves and formats pre-order metadata such as availability date, messages, 
+     * and available quantity for the product.
+     *
+     * @param WC_Product $product The WooCommerce product object.
+     * 
+     * @return string|null The formatted availability message, or null if the product is invalid.
+     */
+    public function upow_display_preorder_info( $product ) {
     
         if ( !$product || ! $product->get_id() ) {
             return; // Ensure product object is available
         }
     
-        // Fetch all the meta data at once to avoid multiple database calls
         $preorder_data = [
-            'pre_release_message'   => get_post_meta($product->get_id(), '_upow_preorder_pre_released_message', true ),
-            'preorder_limit'        => get_post_meta($product->get_id(), '_upow_preorder_available_quantity', true) ,
-            'availability_date'     => get_post_meta($product->get_id(), '_upow_preorder_availability_date', true ),
-            'availability_message'  => get_post_meta($product->get_id(), '_upow_preorder_availability_message', true ),
-            'available_quantity'    => get_post_meta($product->get_id(), '_upow_preorder_available_quantity', true ),
+            'pre_release_message'   => get_post_meta( $product->get_id(), '_upow_preorder_pre_released_message', true ),
+            'preorder_limit'        => get_post_meta( $product->get_id(), '_upow_preorder_available_quantity', true ) ,
+            'availability_date'     => get_post_meta( $product->get_id(), '_upow_preorder_availability_date', true ),
+            'availability_message'  => get_post_meta( $product->get_id(), '_upow_preorder_availability_message', true ),
+            'available_quantity'    => get_post_meta( $product->get_id(), '_upow_preorder_available_quantity', true ),
         ];
 
-        if( isset( $preorder_data['availability_message'] ) && !empty( $preorder_data['availability_message'] ) ) {
-            $availability_on = $preorder_data['availability_message'];
-        } else if ( isset( $this->availability_message ) && !empty( $this->availability_message  ) ) {
-            $availability_on = $this->availability_message;
-        } else {
-            $availability_on = '';
-        } 
-
-
-        $availability_message = '';
-    
-        if ( !empty( $preorder_data['available_quantity'] ) && !empty( $preorder_data['availability_date'] ) && !empty( $availability_on ) ) {
-            $formatted_date = date( 'F j, Y h:i:sa', strtotime( $preorder_data['availability_date'] ) );
-            $availability_message .= '<p class="preorder-availability-message">' . esc_html( $availability_on ) . ' ' . esc_html( $formatted_date ) . '</p>';
-        }
-    
-        if ( empty( $availability_on ) && !empty( $preorder_data['pre_release_message'] ) ) {
-            $availability_message .= '<p class="preorder-pre-release-message">' . esc_html( $preorder_data['pre_release_message'] ) . '</p>';
-        }
-
-
-        if ( !is_checkout() && !is_cart()  && !empty( $preorder_data['preorder_limit'] ) ) { 
-
-            $availability_message .= '<p class="preorder-limit">' . esc_html__('Limited to:', 'ultimate-product-options-for-woocommerce') . ' ' . esc_html( $preorder_data['preorder_limit'] ) . '</p>';
-
-        }
-    
-        // Return the final message
+        $availability_message = $this->get_availability_message( $preorder_data );
         return wp_kses_post( $availability_message );
+
     }
 
+    /**
+     * Outputs the pre-order information for the current global WooCommerce product.
+     *
+     * Calls the pre-order display function and echoes the formatted pre-order message for the product.
+     *
+     * @return void
+     */
     public function upow_display_preorder_info_output() {
 
         global $product;
         echo wp_kses_post( $this->upow_display_preorder_info( $product ) ); // Echo the returned message
     }
     
-
+    /**
+     * Adds preorder data to WooCommerce variation data.
+     *
+     * @param array    $variation_data The variation data array.
+     * @param WC_Product $product      The product object.
+     * @param WC_Product_Variation $variation The product variation object.
+     * @return array                   Modified variation data with preorder label if applicable.
+     */
     public function upow_add_preorder_data_to_variations( $variation_data, $product, $variation ) {
             
         if ( !$product || ! $variation->get_id() ) {
@@ -158,6 +153,18 @@ class Preorder
     
         return $variation_data;
     }
+
+    /**
+     * Adds preorder-related data to WooCommerce variation data.
+     *
+     * This function checks if the variation is part of a variable product and retrieves preorder metadata if applicable.
+     * It appends a preorder availability message to the variation description.
+     *
+     * @param array    $variation_data The variation data array.
+     * @param WC_Product $product      The product object.
+     * @param WC_Product_Variation $variation The product variation object.
+     * @return array                   Modified variation data with preorder details and availability message.
+     */
     
     public function upow_add_preorder_to_variations_data( $variation_data, $product, $variation ) {
 
@@ -170,10 +177,9 @@ class Preorder
                 $variation_id = $variation->get_id();
             
                 if ( !$product || ! $variation->get_id() ) {
-                    return; // Ensure product object is available
+                    return; 
                 }
             
-                // Fetch all the meta data at once to avoid multiple database calls
                 $preorder_data = [
                     'pre_release_message'   => get_post_meta( $variation_id, '_upow_preorder_pre_released_message', true),
                     'preorder_limit'        => get_post_meta( $variation_id, '_upow_preorder_available_quantity', true),
@@ -182,32 +188,7 @@ class Preorder
                     'available_quantity'    => get_post_meta( $variation_id, '_upow_preorder_available_quantity', true),
                 ];
 
-                if( isset( $preorder_data['availability_message'] ) && !empty( $preorder_data['availability_message'] ) ) {
-                    $availability_on = $preorder_data['availability_message'];
-                } else if ( isset( $this->availability_message ) && !empty( $this->availability_message  ) ) {
-                    $availability_on = $this->availability_message;
-                } else {
-                    $availability_on = '';
-                }
-            
-                // Initialize message variable
-                $availability_message = '';
-            
-                // Check if both availability date and message are available
-                if ( !empty( $preorder_data['available_quantity'] ) && !empty( $preorder_data['availability_date'] ) && !empty( $availability_on ) ) {
-                    $formatted_date = date( 'F j, Y h:i:sa', strtotime( $preorder_data['availability_date'] ) );
-                    $availability_message .= '<p class="preorder-availability-message">' . esc_html( $availability_on ) . ' ' . esc_html( $formatted_date ) . '</p>';
-                }
-            
-                if ( empty( $availability_on ) && !empty( $preorder_data['pre_release_message'] ) ) {
-                    $availability_message .= '<p class="preorder-pre-release-message">' . esc_html( $preorder_data['pre_release_message'] ) . '</p>';
-                }
-            
-                if ( !empty( $preorder_data['preorder_limit'] ) ) {
-                    $availability_message .= '<p class="preorder-limit">' . esc_html__('Limited to:', 'ultimate-product-options-for-woocommerce') . ' ' . esc_html( $preorder_data['preorder_limit'] ) . '</p>';
-                }
-            
-                // Output the final message
+                $availability_message = $this->get_availability_message( $preorder_data );
                 $variation_data['variation_description'] .= $availability_message . '<br>';
             }
         }
@@ -215,7 +196,14 @@ class Preorder
         return $variation_data;
     }
     
-    
+    /**
+     * Ensures the quantity added to the cart does not exceed the available preorder limit and prevents adding to cart if exceeded.
+     *
+     * @param bool  $passed      Whether the product can be added to the cart.
+     * @param int   $product_id  The ID of the product being added.
+     * @param int   $quantity    The quantity of the product being added.
+     * @return bool              True if the product can be added, false if it exceeds the preorder limit.
+     */
     public function upow_check_preorder_quantity( $passed, $product_id, $quantity ) {
 
         $available_quantity = get_post_meta( $product_id, '_upow_preorder_available_quantity', true );
@@ -231,52 +219,46 @@ class Preorder
         return $passed;
     }
 
+
+    /**
+     * Displays preorder notification with availability message for simple or variable products on the order page.
+     *
+     * @param int    $item_id     The order item ID.
+     * @param object $item        The order item object.
+     * @param object $order       The order object.
+     * @param bool   $plain_text  Whether the output should be in plain text.
+     */
     public function display_preorder_notification( $item_id, $item, $order, $plain_text ) {
 
-        $product = $item->get_product();
-        $product_id = $product->get_id();
-
-        $simple_preorder_enable  = get_post_meta( $product_id, '_upow_preorder_sample', true );
-        $enable_preorder         = get_post_meta( $product_id, '_upow_preorder_variable_product', true );
+        $product                    = $item->get_product();
+        $product_id                 = $product->get_id();
+        $simple_preorder_enable     = get_post_meta( $product_id, '_upow_preorder_sample', true );
+        $enable_variation_preorder  = get_post_meta( $product_id , '_upow_preorder_variable_product', true );
     
-        // Check if the product is currently on preorder
-        if  ( $enable_preorder === 'yes' || $simple_preorder_enable == 'yes' ) {
-            
+        if  ( $enable_variation_preorder === 'yes' || $simple_preorder_enable == 'yes' ) {
+           
             if ( $product->is_type( 'simple' ) ) {
                 echo  wp_kses_post( $this->upow_display_preorder_info( $product ) );
             } elseif( $product->is_type( 'variation' ) ) {
-                
+
                 $preorder_data = $item->get_meta('preorder_data', true);
-
+               
                 // Check if preorder data exists
-                if ( ! empty( $preorder_data ) ) {
+                if ( isset($preorder_data ) && ! empty( $preorder_data ) ) {
                    
-
-                    if( isset( $preorder_data['availability_message'] ) && !empty( $preorder_data['availability_message'] ) ) {
-                        $availability_on = $preorder_data['availability_message'];
-                    } else if ( isset( $this->availability_message ) && !empty( $this->availability_message  ) ) {
-                        $availability_on = $this->availability_message;
-                    } else {
-                        $availability_on = '';
-                    }
-
-                    $availability_message = '';
-                    if ( ! empty( $preorder_data['availability_date'] ) && ! empty( $availability_on  ) ) {
-                        $formatted_date = date( 'F j, Y h:i:sa', strtotime( $preorder_data['availability_date'] ) );
-                        $availability_message .= '<p class="preorder-availability-message">' . esc_html( $availability_on  ) . ' ' . esc_html( $formatted_date ) . '</p>';
-                    }
-
-                    if ( empty( $availability_on ) && ! empty( $preorder_data['pre_release_message'] ) ) {
-                        $availability_message .= '<p class="preorder-pre-release-message">' . esc_html( $preorder_data['pre_release_message'] ) . '</p>';
-                    }
+                    $availability_message = $this->get_availability_message( $preorder_data );
 
                     echo  wp_kses_post( $availability_message );
                 }
-
             }
         }
     }
 
+    /**
+     * Adds a custom "Preorder Info" header to the admin order table if any product in the order has preorder enabled.
+     *
+     * @param object $order  The WooCommerce order object.
+     */
     public function add_custom_admin_order_header( $order ) {
 
         // Loop through the order items to find the product
@@ -299,21 +281,35 @@ class Preorder
         }
 
     }
-
     
-    function add_preorder_data_to_order_item( $item, $cart_item_key, $values, $order ) {
-        if ( ! empty( $values['preorder_data'] ) ) {
-            // Save preorder data to the order item
+    /**
+     * Adds preorder data as metadata to the order item when an order is created.
+     *
+     * @param object $item           The order item object.
+     * @param string $cart_item_key  The cart item key.
+     * @param array  $values         The cart item values, including preorder data.
+     * @param object $order          The WooCommerce order object.
+     */
+    public function add_preorder_data_to_order_item( $item, $cart_item_key, $values, $order ) {
+
+        if ( isset( $values['preorder_data'] ) && ! empty( $values['preorder_data'] ) ) {
             $item->add_meta_data( 'preorder_data', $values['preorder_data'], true );
         }
+
     }
 
+    /**
+     * Displays preorder information in the admin order page for simple or variable products with preorder enabled.
+     *
+     * @param object $product  The WooCommerce product object.
+     * @param object $item     The order item object.
+     * @param int    $item_id  The order item ID.
+     */
     public function display_preorder_notification_in_admin_order( $product, $item, $item_id ) {
 
-        $availability_date = $product->get_meta( '_upow_preorder_availability_date' );
-        $today = strtotime('today');
-        $product_id = $product->get_id();
-
+        $availability_date       = $product->get_meta( '_upow_preorder_availability_date' );
+        $today                   = strtotime('today');
+        $product_id              = $product->get_id();
         $simple_preorder_enable  = get_post_meta( $product_id, '_upow_preorder_sample', true );
         $enable_preorder         = get_post_meta( $product_id, '_upow_preorder_variable_product', true );
 
@@ -327,30 +323,11 @@ class Preorder
 
                 $preorder_data = $item->get_meta('preorder_data', true);
 
-                // Check if preorder data exists
                 if ( ! empty( $preorder_data ) ) {
-                    // Initialize message variable
 
-                    if( isset( $preorder_data['availability_message'] ) && !empty( $preorder_data['availability_message'] ) ) {
-                        $availability_on = $preorder_data['availability_message'];
-                    } else if ( isset( $this->availability_message ) && !empty( $this->availability_message  ) ) {
-                        $availability_on = $this->availability_message;
-                    } else {
-                        $availability_on = '';
-                    }
+                    $availability_message = $this->get_availability_message( $preorder_data );
 
-                    $availability_message = '';
-
-                    if ( ! empty( $preorder_data['availability_date'] ) && ! empty( $availability_on ) ) {
-                        $formatted_date = date( 'F j, Y h:i:sa', strtotime( $preorder_data['availability_date'] ) );
-                        $availability_message .= '<p class="preorder-availability-message">' . esc_html( $availability_on ) . ' ' . esc_html( $formatted_date ) . '</p>';
-                    }
-
-                    if ( empty( $availability_on ) && ! empty( $preorder_data['pre_release_message'] ) ) {
-                        $availability_message .= '<p class="preorder-pre-release-message">' . esc_html( $preorder_data['pre_release_message'] ) . '</p>';
-                    }
-
-                    $preorder_column .= $availability_on;
+                    $preorder_column .= $availability_message;
                 }
             }
             
@@ -359,38 +336,23 @@ class Preorder
         }
     
         $preorder_column .= '</td>';
-    
-        // Output the final HTML
         echo wp_kses_post( $preorder_column );
-       
 
     }
 
-
-    // Add custom preorder data to WooCommerce cart item data
+    /**
+     * Renders preorder availability information on the cart page by appending an availability message to the cart item data.
+     *
+     * @param array $item_data  The cart item data to display.
+     * @param array $cart_item  The cart item array containing preorder data.
+     * @return array            The modified cart item data with the preorder availability message.
+     */
     public function render_preorder_availability_cart_page( $item_data, $cart_item ) {
 
         if ( ! empty( $cart_item['preorder_data'] ) ) {
-            $preorder_data = $cart_item['preorder_data'];
 
-            if( isset( $preorder_data['availability_message'] ) && !empty( $preorder_data['availability_message'] ) ) {
-                $availability_on = $preorder_data['availability_message'];
-            } else if ( isset( $this->availability_message ) && !empty( $this->availability_message  ) ) {
-                $availability_on = $this->availability_message;
-            } else {
-                $availability_on = '';
-            }
-
-            $availability_message= '';
-
-            if ( !empty( $preorder_data['availability_date'] ) && !empty( $availability_on ) ) {
-                $formatted_date = date( 'F j, Y h:i:sa', strtotime( $preorder_data['availability_date'] ) );
-                $availability_message .= '<p class="preorder-availability-message">' . esc_html( $availability_on ) . ' ' . esc_html( $formatted_date ) . '</p>';
-            }
-
-            if ( empty( $availability_on ) && !empty( $preorder_data['pre_release_message'] ) ) {
-                $availability_message .= '<p class="preorder-pre-release-message">' . esc_html( $preorder_data['pre_release_message'] ) . '</p>';
-            }
+            $preorder_data          = $cart_item['preorder_data'];
+            $availability_message   = $this->get_availability_message( $preorder_data );
 
             // Append the availability message to the item data
             if ( ! empty( $availability_message ) ) {
@@ -403,6 +365,14 @@ class Preorder
 
         return $item_data;
     }
+
+    /**
+     * Adds preorder data to the cart item if the product is a simple or variable type with preorder enabled.
+     *
+     * @param array $cart_item_data  The cart item data to be modified.
+     * @param int   $product_id      The ID of the product being added to the cart.
+     * @return array                 The modified cart item data including preorder information.
+     */
     
     public function upow_add_preorder_data_to_cart_item_data( $cart_item_data, $product_id ) {
 
@@ -427,6 +397,7 @@ class Preorder
                     'pre_release_message'   => get_post_meta( $product_global_id, '_upow_preorder_pre_released_message', true),
                     'availability_date'     => get_post_meta( $product_global_id, '_upow_preorder_availability_date', true),
                     'availability_message'  => get_post_meta( $product_global_id, '_upow_preorder_availability_message', true),
+                    'available_quantity'    => get_post_meta( $product_global_id, '_upow_preorder_available_quantity', true),
                 ];
 
                 // Save preorder data to cart item
@@ -438,6 +409,49 @@ class Preorder
 
     }
 
+    /**
+     * Generates a formatted availability message for preorder products based on the provided preorder data.
+     *
+     * @param array $preorder_data  The preorder data containing availability information.
+     * @return string               The formatted availability message, including release date and pre-release message.
+     */
+    public function get_availability_message( $preorder_data ) {
+
+        if( isset( $preorder_data['availability_message'] ) && !empty( $preorder_data['availability_message'] ) ) {
+            $availability_on = $preorder_data['availability_message'];
+        } else if ( isset( $this->availability_message ) && !empty( $this->availability_message  ) ) {
+            $availability_on = $this->availability_message;
+        } else {
+            $availability_on = '';
+        }
+    
+        // Initialize message variable
+        $availability_message = '';
+    
+        // Check if both availability date and message are available
+        if (  !empty( $preorder_data['availability_date'] ) && !empty( $availability_on ) ) {
+            $formatted_date = date( 'F j, Y h:i:sa', strtotime( $preorder_data['availability_date'] ) );
+            $availability_message .= '<p class="preorder-availability-message">' . esc_html( $availability_on ) . ' ' . esc_html( $formatted_date ) . '</p>';
+        }
+    
+        if ( empty( $availability_on ) && !empty( $preorder_data['pre_release_message'] ) ) {
+            $availability_message .= '<p class="preorder-pre-release-message">' . esc_html( $preorder_data['pre_release_message'] ) . '</p>';
+        }
+    
+        if ( !is_checkout() && !is_cart()  && !empty( $preorder_data['preorder_limit'] ) ) { 
+            $availability_message .= '<p class="preorder-limit">' . esc_html__('Limited to:', 'ultimate-product-options-for-woocommerce') . ' ' . esc_html( $preorder_data['preorder_limit'] ) . '</p>';
+        }
+
+        return $availability_message;
+
+    }
+
+    /**
+     * Adds a custom stock status 'Pre-Order' for products in the admin product listing.
+     *
+     * @param array $status The current stock status array.
+     * @return array       The modified stock status array with the added 'Pre-Order' status for products.
+     */
 
     public function filter_get_stock_status_callback( $status ) {
 
@@ -453,8 +467,13 @@ class Preorder
     }
 
 
-    // Modify the query to filter pre-order products in admin
-    
+    /**
+     * Modifies the product archive query to filter for products with a 'preorder' stock status.
+     *
+     * @param array   $args  The original query arguments.
+     * @param WP_Query $query The current WP_Query instance.
+     * @return array         The modified query arguments to include preorder products.
+     */
     public function upow_filter_pre_order_product( $args, $query ) {
         global $wpdb;
 
@@ -462,7 +481,6 @@ class Preorder
             return $args; // Only modify main query for product archive
         }
     
-        // Check if 'stock_status' is set in the URL parameters
         if ( isset( $_GET['stock_status'] ) && ! empty( $_GET['stock_status'] ) && $_GET['stock_status'] === 'preorder' ) {
             
             $args['where'] = str_replace(
@@ -487,55 +505,78 @@ class Preorder
        return $args;
     }
 
-    //Filter products with specific meta fields for pre-order
+    /**
+     * Filters the product list in the admin area to only include simple products that are available for pre-order.
+     *
+     * @param array      $posts The array of posts (products) to filter.
+     * @param WP_Query   $query The current WP_Query instance.
+     * @return array             The filtered array of posts, including only those with pre-order enabled.
+     */
     public function upow_filter_pre_order_prouduct_variable( $posts, $query ) {
 
         if ( is_admin() && isset( $_GET['stock_status'] ) && $_GET['stock_status'] == 'preorder' ) {
+
             foreach ( $posts as $key => $post ) {
     
-                $product_id = $post->ID;
-                $product = wc_get_product($product_id);
+                $product_id         = $post->ID;
+                $product            = wc_get_product( $product_id );
     
                 // Check for simple product pre-order
                 $simple_preorder_enable = get_post_meta($product_id, '_upow_preorder_sample', true);
 
-                if ($simple_preorder_enable !== 'yes') {
-                    unset($posts[$key]); 
+                if ( $simple_preorder_enable !== 'yes' ) {
+                    unset( $posts[$key] ); 
                 }
-                
             }
         }
     
         return $posts;
     }
 
+    /**
+     * Adds a pre-order notification text to the order details in the admin for line items that are pre-order enabled.
+     *
+     * @param int        $item_id The ID of the order item.
+     * @param WC_Order_Item_Product $item The order item object.
+     * @param WC_Order   $order The order object.
+     */
     public function pre_order_add_text_order_detail_admin( $item_id, $item, $order ) {
         
         if ( ! $item->is_type( 'line_item' ) ) {
             return; // Skip if it's not a line item
         }
 
-        $product_id = $item->get_product_id();
-        $variation_id = $item->get_variation_id();
-        
-        // Check for pre-order meta fields
-        $simple_preorder_enable = get_post_meta($product_id, '_upow_preorder_sample', true);
-        $enable_preorder = get_post_meta($variation_id, '_upow_preorder_variable_product', true);
+        $product_id                 = $item->get_product_id();
+        $variation_id               = $item->get_variation_id();
+        $simple_preorder_enable     = get_post_meta( $product_id, '_upow_preorder_sample', true );
+        $enable_preorder            = get_post_meta( $variation_id, '_upow_preorder_variable_product', true );
 
         if ($simple_preorder_enable === 'yes' || $enable_preorder === 'yes') {
 
             $pre_order_text = apply_filters('upow_order_details_pre_order_text', __('Pre-Order Product', 'ultimate-product-options-for-woocommerce'));
-            
             echo wp_kses_post('<p style="font-weight: bold; color: orange;">' . $pre_order_text . '</p>');
         }
     }
 
-    // Function to add the custom column
-    public function add_preorder_date_column($columns) {
+    /**
+     * Adds a custom column for pre-order dates to the WooCommerce admin products list.
+     *
+     * @param array $columns The existing columns in the products list.
+     * @return array Modified columns with the new pre-order dates column.
+     */
+    public function add_preorder_date_column( $columns ) {
+
         $columns['preorder_dates'] = __('Pre-Order Dates', 'ultimate-product-options-for-woocommerce');
         return $columns;
+
     }
 
+    /**
+     * Populates the pre-order dates column in the WooCommerce admin products list for simple and variable products.
+     *
+     * @param string $column The name of the column being populated.
+     * @param int    $product_id The ID of the product being processed.
+     */
     public function populate_preorder_date_column( $column, $product_id ) {
 
         if ('preorder_dates' !== $column) {
@@ -547,18 +588,16 @@ class Preorder
     
         $product_type = $product->get_type();
         $variation_attr = [];
-        if ($product_type === 'simple') {
+        if ( $product_type === 'simple' ) {
             $this->process_preorder_dates( $product_id, '_upow_preorder_sample', $preorder_dates, $product_type, $variation_attr  );
-        }
-    
-        if ($product_type === 'variable') {
+
+        } else if ($product_type === 'variable') {
 
             $variation_ids = $product->get_children();
             foreach ( $variation_ids as $variation_id ) {
 
                 $product_variation = new \WC_Product_Variation( $variation_id );
 				$variation_attr    = implode( " / ", $product_variation->get_variation_attributes() );
-
                 $this->process_preorder_dates( $variation_id, '_upow_preorder_variable_product', $preorder_dates, $product_type, $variation_attr );
             }
 
@@ -569,7 +608,16 @@ class Preorder
 
     }
     
-    // Helper function to process pre-order dates
+    /**
+     * Processes and formats pre-order dates for a product, determining time until availability 
+     * and appending formatted date information to the preorder_dates array based on product type.
+     *
+     * @param int    $product_id The ID of the product being processed.
+     * @param string $meta_key The meta key to check for pre-order status.
+     * @param array  &$preorder_dates Reference to the array where formatted pre-order date information is added.
+     * @param string $product_type The type of product ('simple' or 'variable').
+     * @param string $variation_attr Attributes for the product variation, if applicable.
+     */
     private function process_preorder_dates( $product_id, $meta_key, &$preorder_dates, $product_type, $variation_attr ) {
        
         $preorder_enable = get_post_meta( $product_id, $meta_key, true );
