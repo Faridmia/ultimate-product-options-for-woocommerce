@@ -17,7 +17,6 @@ class Preorder
     private function get_upow_preorder_fields_options() {
         $options = [
             'upow_preorder_on_off_switch'        => $this->get_option_checked('upow_preorder_on_off'),
-            'upow_preorder_label_text'           => get_option('upow_preorder_label_text', ''),
             'upow_preorder_addto_cart_text'      => get_option('upow_preorder_addto_cart_text', ''),
             'upow_preorder_available_text_msg'   => get_option('upow_preorder_available_text_msg', ''),
             'upow_preorder_pre_released_message' => get_option('upow_preorder_pre_released_message', ''),
@@ -47,7 +46,6 @@ class Preorder
                     <div class="upow-settings-main-wrapper">
                         <div class="upow-settings-left-panel">
                             <?php $this->render_checkbox_item('Preorder Enable?', 'upow_preorder_on_off', $this->options['upow_preorder_on_off_switch']); ?>
-                            <?php $this->render_text_input('Preorder Label Text', 'upow_preorder_label_text', $this->options['upow_preorder_label_text'], 'Preorder'); ?>
                             <?php $this->render_text_input('Preorder Add to cart Text', 'upow_preorder_addto_cart_text', $this->options['upow_preorder_addto_cart_text'], 'Preorder Now'); ?>
                         </div>
                         <div class="upow-settings-right-panel">

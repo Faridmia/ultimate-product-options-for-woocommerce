@@ -22,11 +22,9 @@ class PreorderAjax
         // Set default values for specific options
         $default_options = [
             'upow_preorder_on_off' => '',
-            'upow_preorder_label_text' => '',
             'upow_preorder_addto_cart_text' => '',
             'upow_preorder_available_text_msg' => '',
             'upow_preorder_pre_released_message' => '',
-            
         ];
 
         foreach ( $default_options as $key => $default_value ) {

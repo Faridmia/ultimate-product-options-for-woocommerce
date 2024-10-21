@@ -1,8 +1,6 @@
 (function ( window, document, $, undefined ) {
     'use strict';
 
-    
-    
     $(document).ready(function($) {
         // Custom Add to Cart text for preorder products
         $('form.variations_form').on('found_variation', function(event, variation) {
@@ -30,7 +28,6 @@
         $('form.variations_form').on('found_variation', function(event, variation) {
             var addToCartBtn = $('form.variations_form .single_add_to_cart_button');
     
-            // Check if the variation has preorder data
             if (variation.preorder_availability_message) {
                 // Display preorder availability message
                 $('.preorder-availability-message').html(variation.preorder_availability_message);
@@ -58,26 +55,6 @@
         });
     });
 
-
-    jQuery(document).ready(function($) {
-        // Ensure price updates when variation changes
-        $('form.variations_form').on('found_variation', function(event, variation) {
-           //if (variation._upow_preorder_enable === 'yes') {
-                // Replace the price HTML with the new preorder price
-                var preorder_price = variation.display_price;
-                var regular_price_html = '<del>' + variation.price_html + '</del>';
-                var preorder_price_html = '<ins>' + variation.formatted_price + '</ins>';
-    
-                $(this).find('.woocommerce-variation-price').html(regular_price_html + ' ' + preorder_price_html);
-           // }
-        });
-    });
-    
-    
-    
-    
-    
-    
     
 
 })( window, document, jQuery );
