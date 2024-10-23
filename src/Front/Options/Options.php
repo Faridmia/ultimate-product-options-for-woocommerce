@@ -7,12 +7,13 @@ class Options
     use Traitval;
     public $global_product_id;
     protected $settings = [];
-    /**
-     * Constructor
-     * 
-     * The constructor adds an action to the 'admin_menu' hook to add custom submenus
-     * to the WordPress admin menu.
-     */
+
+   /*
+    * Constructor
+    *
+    * The constructor adds an action to the 'admin_menu' hook to add custom 
+    * submenus to the WordPress admin menu.
+    */
     public function __construct()
     {
 
@@ -43,6 +44,10 @@ class Options
      * Initialize the global product ID.
      * 
      * This function is hooked into 'wp' to ensure the product is set up before getting the ID.
+     * 
+     * @since 1.0.0
+     *
+     * @ return void
      */
     public function initialize_product_id()
     {
@@ -51,6 +56,16 @@ class Options
         }
     }
 
+    /**
+     * Localizes the frontend script with product-specific data.
+     *
+     * This function checks if the 'upow-frontend-script' is enqueued, and if so,
+     * it localizes the script with the product ID for use in JavaScript.
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
     public function localize_script() {
 
         // Ensure the script is enqueued before localizing
@@ -59,11 +74,16 @@ class Options
             wp_localize_script('upow-frontend-script', 'upow_localize_product_obj', array(
                 'productId' => $this->global_product_id
             ));
-
         }
-
     }
 
+    /**
+     * Returns default query arguments for 'upow_product' posts.
+     *
+     * @since 1.0.0
+     *
+     * @return array Default query arguments.
+     */
     private function get_default_args() {
         return [
             'post_type'      => 'upow_product',
@@ -73,6 +93,13 @@ class Options
         ];
     }
 
+    /**
+     * Retrieves the 'upow_product' meta value for the current product.
+     *
+     * @since 1.0.0
+     *
+     * @return mixed Meta value of 'upow_product'.
+     */
     private function get_upow_product() {
 
         return get_post_meta( $this->global_product_id, 'upow_product', true );
@@ -81,7 +108,9 @@ class Options
 
     /**
      * Get query arguments and upow product meta data
-     * 
+     *
+     * @since 1.0.0
+     *
      * @return array [ 'args' => array, 'upow_product' => mixed ]
      */
     public function get_upow_query_args() {
@@ -109,6 +138,13 @@ class Options
         return ['args' => $args, 'upow_product' => $upow_product];
     }
     
+    /**
+     * Checks if the global feature is enabled based on the settings.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if the global feature is enabled, false otherwise.
+     */
     private function is_global_feature_enabled() {
 
         return ($this->settings['global_feature_on_off'] === 'yes' || $this->settings['global_feature_on_off'] == 1 || !empty($this->settings['global_feature_on_off'])) 
@@ -116,6 +152,15 @@ class Options
 
     }
     
+    /**
+     * Determines if the current product is excluded based on settings.
+     *
+     * Checks if the product ID is present in the exclude product list.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if the product is excluded, false otherwise.
+     */
     private function is_product_excluded() {
 
         if (is_array( $this->settings['exclude_product'] ) || is_object( $this->settings['exclude_product'] ) ) {
@@ -131,6 +176,16 @@ class Options
 
     }
     
+    /**
+     * Checks if the current product is selected based on settings and global feature status.
+     *
+     * This function first ensures the global feature is disabled, then checks if 
+     * the current product ID is present in the selected product list.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if the product is selected, false otherwise.
+     */
     private function is_selected_product() {
 
         if ( !$this->is_global_feature_enabled() ) {
@@ -142,12 +197,24 @@ class Options
                     }
                 }
             }
-
         }
 
         return false;
     }
 
+    /**
+     * Renders custom field items for each post in the provided custom query.
+     *
+     * This function checks if the custom query has posts, and if so, iterates through 
+     * each post, retrieves the 'upow_product' meta value, and calls the 
+     * render_custom_field_item method to display it. 
+     * It resets post data after processing the query.
+     *
+     * @since 1.0.0
+     *
+     * @param WP_Query $custom_query The custom query object to loop through.
+     * @return void
+     */
     private function render_custom_query( $custom_query ) {
 
         if ( !$custom_query->have_posts() ) {
@@ -167,6 +234,20 @@ class Options
         wp_reset_postdata();
     }
     
+    /**
+     * Renders custom field items for a given product.
+     *
+     * This function checks if the provided product data is valid and non-empty. 
+     * If valid, it generates a nonce for security and outputs a hidden nonce field, 
+     * along with a title and inner content that includes rendered fields for each 
+     * extra item in the product.
+     *
+     * @since 1.0.0
+     *
+     * @param int $main_id The main ID used for rendering fields.
+     * @param array $upow_product An array of custom product field items to render.
+     * @return void
+     */
     private function render_custom_field_item( $main_id,$upow_product ) {
 
         if (empty( $upow_product ) || !is_array( $upow_product ) ) {
@@ -193,7 +274,23 @@ class Options
         $content = ob_get_clean();
         printf('%s', do_shortcode( $content ) );
     }
-    
+
+    /**
+     * Renders a custom field based on the provided extra item data.
+     *
+     * This function generates the HTML for a custom field, including a label and 
+     * an input element, handling different field types and required status.
+     *
+     * @since 1.0.0
+     *
+     * @param array $extra_item An associative array containing field data, including 
+     *                          'field_type', 'field_label', 'default_value', 
+     *                          'placeholder_text', and 'required'.
+     * @param int $main_id The main ID used for rendering the field.
+     * @param int $count The index of the current field being rendered.
+     * @param array $total_field_value An associative array containing total field values.
+     * @return void
+     */
     private function render_field( $extra_item, $main_id, $count, $total_field_value ) {
 
         $field_type         = $extra_item['field_type'] ?? '';
@@ -233,6 +330,20 @@ class Options
 
     }
     
+
+    /**
+     * Renders specific custom item fields for a given product.
+     *
+     * This function outputs HTML for extra product fields based on the provided 
+     * product data, including field type, label, default value, and whether 
+     * the field is required.
+     *
+     * @since 1.0.0
+     *
+     * @param int $global_product_id The ID of the global product.
+     * @param array $upow_product An associative array containing custom field data for the product.
+     * @return void
+     */
     public function upow_specific_product_item_fields( $global_product_id, $upow_product ) {
 
         if ( empty( $upow_product ) || !is_array( $upow_product ) ) {
@@ -293,7 +404,6 @@ class Options
      *
      * @return void
      */
-
     public function upow_add_custom_fields_single_page() {
 
         global $product;
@@ -348,10 +458,22 @@ class Options
         printf('%s', do_shortcode( $content ) );
 
         }
-    
     }
 
-
+    /**
+     * Validates custom fields submitted with a product.
+     *
+     * This function checks if the nonce for template validation is set and 
+     * verifies it, then checks if custom field data is present in the 
+     * submitted form data.
+     *
+     * @since 1.0.0
+     *
+     * @param bool $passed Indicates if the validation has passed or failed.
+     * @param int $product_id The ID of the product being validated.
+     * @param int $quantity The quantity of the product being purchased.
+     * @return bool $passed The modified validation status.
+     */
     public function upow_validate_custom_fields( $passed, $product_id, $quantity )
     {
 

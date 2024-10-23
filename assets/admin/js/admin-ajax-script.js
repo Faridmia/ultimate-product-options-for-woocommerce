@@ -13,7 +13,7 @@
         $('.upow_popup_item_save').val('Save Changes').prop('disabled', false);
     });
 
-    $('.upow-backorder-options-fields,.upow-variations-swatches-options-fields,.upow-preorder-options-fields').on('click', 'input, select, textarea', function() {
+    $('.upow-backorder-options-fields,.upow-variations-swatches-options-fields,.upow-preorder-options-fields,.upow-one-click-checkout-options-fields').on('click', 'input, select, textarea', function() {
         $('.upow_checkbox_item_save').val('Save Changes').prop('disabled', false);
     });
 
@@ -379,6 +379,44 @@
             });
         });
     });
+
+    // quick checkout ajax
+
+    $(document).ready(function($) {
+        $('.upow-one-click-checkout-options-fields').on('submit', function(e) {
+            e.preventDefault();
+            
+            var formData = $(this).serialize();
+            formData += '&action=upow_quick_checkout_fields_save_options';
+            formData += '&nonce=' + upow_localize_obj.nonce;
+            
+            var saveButton = $('.upow_checkbox_item_save');
+
+            $.ajax({
+                type: 'POST',
+                url: upow_localize_obj.ajax_url,
+                data: formData,
+                beforeSend: function() {
+                    saveButton.val('Saving...').prop('disabled', false);
+                },
+                success: function (response) {
+                    if (response.success) {
+                        displayMessage('Your settings have been saved', 'success');
+                    } else {
+                        displayMessage('There was an error saving your settings', 'error');
+                    }
+                    saveButton.val('Save All Data').prop('disabled', true);
+                    saveButton.attr('disabled', 'disabled');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('AJAX error:', textStatus, errorThrown);
+                    alert('AJAX error: ' + textStatus);
+                }
+            });
+        });
+    });
+
+    
 
 
     

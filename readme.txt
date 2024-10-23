@@ -4,7 +4,7 @@ Tags: woocommerce, product options, custom fields, flashsale,variation swatches
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,8 +12,7 @@ Ultimate Product Options For WooCommerce allows you to add custom fields and ext
 
 == Description ==
 
-Ultimate Product Options For WooCommerce provides an easy way to add custom fields and extra options to your WooCommerce products. Enhance your product listings by offering more customization options for your customers, helping you increase sales and improve user satisfaction.
-
+Introducing our powerful WooCommerce Plugin, designed to enhance your online store with a variety of features that drive sales and improve customer experience. **With Flash Sale Countdown**, you can create urgency and excitement with customizable countdown timers for flash sales, capturing your customers' attention and increasing conversion rates. **The Product Extra Fields Addons** feature allows you to enhance product pages with customizable extra fields and add-ons, enabling customers to personalize their purchases. Our **Backorder Product** Management ensures you never miss a sale, letting customers order out-of-stock items and notifying them when they become available again. The Product **Variation Swatches** improve your product display by showcasing attributes like color and size, allowing quick selections for a better shopping experience. Finally, the **Preorder Product** Capability generates buzz and secures sales in advance, enticing customers with special promotions before products launch. Boost your WooCommerce store’s performance today with our feature-rich plugin that seamlessly integrates into your existing setup!
 
 
 = Installation =
@@ -47,6 +46,9 @@ Elevate your WooCommerce store with the Product Extra Field Addon, offering unli
 
 **Variation Swatches**
 The Variation Swatches for WooCommerce Addon transforms product variations into color, image, and label swatches. This allows shoppers to easily select the right product variations, such as colors or sizes, enhancing the shopping experience and improving conversions.
+
+**Preorder Product**
+Our plugin's Pre-Order feature allows you to boost sales by letting customers reserve products before their release. Enhance your marketing strategy with enticing promotions, such as exclusive discounts and free gifts. Increase purchase intention, attract more customers, and streamline inventory management. Optimize your e-commerce success with effective pre-order promotions today!
 
 == Requirements ==
 
@@ -103,6 +105,10 @@ The Variation Swatches for WooCommerce Addon transforms product variations into 
 
 
 ## Changelog ##
+
+= Version 1.0.4 (October 22, 2024) =
+* **Added:** Preorder Product.
+* **Fix:** flashsale setting
 
 = Version 1.0.3 (October 6, 2024) =
 * **Added:** Product Variation Swatches.

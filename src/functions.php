@@ -65,27 +65,39 @@ function upow_kses_allowed_html($upow_tags, $upow_context)
     }
 }
 
-
-function sanitize_upow_custom_field_items_data($data)
+/**
+ * Sanitizes the custom field items data.
+ *
+ * This function takes input data, which can be either an array or a string,
+ * and sanitizes it by ensuring that keys are safe and values are properly 
+ * sanitized as text fields. It returns an associative array of sanitized 
+ * values or a single sanitized string.
+ *
+ * @param mixed $data The input data to be sanitized (array or string).
+ * @return array|string The sanitized data.
+ *
+ * @since 1.0.0
+ */
+function sanitize_upow_custom_field_items_data( $data  )
 {
     $sanitized_data = array();
 
-    if (is_array($data)) {
-        foreach ($data as $key => $value) {
-            $sanitized_key = sanitize_key($key);
+    if ( is_array( $data ) ) {
+        foreach ( $data as $key => $value ) {
+            $sanitized_key = sanitize_key( $key );
 
             // Check if $value is an array before using array_map
-            if (is_array($value)) {
-                $sanitized_value = array_map('sanitize_text_field', $value);
+            if ( is_array( $value ) ) {
+                $sanitized_value = array_map('sanitize_text_field', $value );
             } else {
-                $sanitized_value = sanitize_text_field($value);
+                $sanitized_value = sanitize_text_field( $value );
             }
 
             $sanitized_data[$sanitized_key] = $sanitized_value;
         }
     } else {
         // Sanitize non-array data
-        $sanitized_data = sanitize_text_field($data);
+        $sanitized_data = sanitize_text_field( $data );
     }
 
     return $sanitized_data;
@@ -287,7 +299,7 @@ function upow_custom_cart_hook( $cart_html, $product, $args ) {
     return $before . $cart_html . $after;
 }
 
-
+// preorder and backorder add to cart text change function
 function upow_change_add_to_cart_text( $text, $product ) {
     
     // Get the custom Add to Cart texts for both backorder and preorder
@@ -296,16 +308,24 @@ function upow_change_add_to_cart_text( $text, $product ) {
 
     $upow_preorder_on_off = get_option('upow_preorder_on_off',true);
     $upow_backorder_on_off = get_option('upow_backorder_on_off',true);
+
+    $upow_oneclick_checkout_on_off = get_option('upow_oneclick_checkout_on_off',true);
+    $upow_oneclick_checkout_shop_enable = get_option('upow_oneclick_checkout_shop_enable',true);
+    $upow_one_click_checkout_btn_text = get_option('upow_one_click_checkout_btn_text',true);
+
+    $is_preorder = get_post_meta( $product->get_id(), '_upow_preorder_sample', true );
     
     // Check if the product is on backorder
     if ( $product->is_on_backorder( 1 ) && $upow_backorder_on_off == '1') {
         return $upow_backorder_addto_cart_text;
     }
-    
-    // Check if the product is on preorder
-    $is_preorder = get_post_meta( $product->get_id(), '_upow_preorder_sample', true );
-    if ( $is_preorder == 'yes' &&  $upow_preorder_on_off == 1 ) {
+    else if ( $is_preorder == 'yes' &&  $upow_preorder_on_off == 1 ) {
         return $upow_preorder_addto_cart_text;
+    } elseif ( $upow_oneclick_checkout_shop_enable == '1' &&  is_shop() && $upow_oneclick_checkout_on_off == '1' ) {
+        return $upow_one_click_checkout_btn_text;
+    }
+    elseif ( is_product() && $upow_oneclick_checkout_on_off == '1') { 
+        return $upow_one_click_checkout_btn_text;
     }
     
     // Default to 'Add to cart'

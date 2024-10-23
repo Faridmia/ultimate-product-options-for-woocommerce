@@ -36,6 +36,8 @@ class Upow_Activator
 			return false;
 		}
 
+		update_option('upow_oneclick_checkout_shop_enable', 0);
+		update_option('upow_oneclick_checkout_on_off', 0);
 		update_option('upow_extra_feature_on_off_global', 0);
 		update_option('upow_global_extra_feature_on_off', 0);
 		update_option('upow_accordion_style_on_off', 0);
@@ -56,6 +58,7 @@ class Upow_Activator
 		update_option('upow_swatches_position','before_cart');
 		update_option('upow_countdown_style','layout_style_1');
 		update_option('upow_countdown_position','woocommerce_after_add_to_cart_form');
+
 
 	}
 }

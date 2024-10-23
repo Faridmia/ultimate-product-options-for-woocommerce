@@ -1,5 +1,4 @@
 <?php
-
 namespace Ultimate\Upow\Admin\AdminPanel\Settings;
 use Ultimate\Upow\Traitval\Traitval;
 

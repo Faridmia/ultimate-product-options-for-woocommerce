@@ -7,7 +7,7 @@
 Plugin Name: Ultimate Product Options For WooCommerce
 Plugin URI: http://github.com/faridmia/ultimate-product-options-for-woocommerce
 Description: Add extra product options like text fields, radio fields, and checkboxes to your WooCommerce products.
-Version: 1.0.3
+Version: 1.0.4
 Requires at least: 6.4
 Requires PHP: 7.4
 Author: faridmia

@@ -6,6 +6,7 @@ use Ultimate\Upow\Admin\AdminPanel\Settings\GeneralSettings;
 use Ultimate\Upow\Admin\AdminPanel\Settings\Backorder;
 use Ultimate\Upow\Admin\AdminPanel\Settings\Preorder;
 use Ultimate\Upow\Admin\AdminPanel\Settings\SwatchVariations;
+use Ultimate\Upow\Admin\AdminPanel\Settings\QuickCheckout;
 use Ultimate\Upow\Admin\Ajax\CommonAjax;
 use Ultimate\Upow\Admin\Ajax\FlashSaleAjax;
 use Ultimate\Upow\Admin\Ajax\GeneralTabAjax;
@@ -13,6 +14,7 @@ use Ultimate\Upow\Admin\Ajax\ProductOptionsAjax;
 use Ultimate\Upow\Admin\Ajax\BackorderAjax;
 use Ultimate\Upow\Admin\Ajax\SwatchVariationAjax;
 use Ultimate\Upow\Admin\Ajax\PreorderAjax;
+use Ultimate\Upow\Admin\Ajax\QuickCheckoutAjax;
 
 /**
  * Class Admin
@@ -33,6 +35,7 @@ class AdminPanel {
     protected $BackorderAjax;
     protected $SwatchVariationAjax;
     protected $PreorderAjax;
+    protected $QuickCheckoutAjax;
     /**
      * Initialize the class
      *
@@ -49,10 +52,11 @@ class AdminPanel {
         $this->BackorderAjax = new BackorderAjax();
         $this->SwatchVariationAjax = new SwatchVariationAjax();
         $this->PreorderAjax = new PreorderAjax();
+        $this->QuickCheckoutAjax = new QuickCheckoutAjax();
 
         $this->initialize_hooks();
     }
-
+    
     protected function initialize_hooks() {
 
         add_action( 'upow_after_add_option', array( $this, 'upow_after_add_option_callback' ), 5 );
@@ -98,6 +102,11 @@ class AdminPanel {
         add_action( 'wp_ajax_upow_preorder_options_fields_save_options', array( $this->PreorderAjax, 'upow_preorder_options_fields_save_options' ) );
         add_action( 'wp_ajax_nopriv_upow_preorder_options_fields_save_options', array( $this->PreorderAjax, 'upow_preorder_options_fields_save_options' ) );
 
+        // quick checkout ajax
+        add_action( 'wp_ajax_upow_quick_checkout_fields_save_options', array( $this->QuickCheckoutAjax, 'upow_quick_checkout_fields_save_options' ) );
+        add_action( 'wp_ajax_nopriv_upow_quick_checkout_fields_save_options', array( $this->QuickCheckoutAjax, 'upow_quick_checkout_fields_save_options' ) );
+
+
     }
 
     public function upow_after_add_option_callback() {
@@ -108,5 +117,6 @@ class AdminPanel {
         Backorder::getInstance()->upow_backorder_fields_backend();
         SwatchVariations::getInstance()->upow_swatchvariations_fields_backend();
         Preorder::getInstance()->upow_preorder_fields_backend();
+        QuickCheckout::getInstance()->upow_quickcheckout_fields_backend();
     }
 }

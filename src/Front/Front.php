@@ -8,6 +8,7 @@ use Ultimate\Upow\Front\General\General;
 use Ultimate\Upow\Front\Backorder\Backorder;
 use Ultimate\Upow\Front\Preorder\Preorder;
 use Ultimate\Upow\Front\SwatchVariation\SwatchVariation;
+use Ultimate\Upow\Front\QuickCheckout\QuickCheckout;
 
 /**
  * Class Front
@@ -30,6 +31,7 @@ class Front
     protected $backorder_instance;
     protected $swatches_instance;
     protected $preorder_instance;
+    protected $quickcheckout_instance;
 
     /**
      * Initialize the class
@@ -48,30 +50,59 @@ class Front
      */
     private function init_hooks()
     {
-       $this->options_instance     = Options::getInstance();
-       $this->flashsale_instance   = FlashSale::getInstance();
-       $this->backorder_instance   = Backorder::getInstance();
-       $this->swatches_instance    = SwatchVariation::getInstance();
-       $this->preorder_instance    = Preorder::getInstance();
+       $this->options_instance          = Options::getInstance();
+       $this->flashsale_instance        = FlashSale::getInstance();
+       $this->backorder_instance        = Backorder::getInstance();
+       $this->swatches_instance         = SwatchVariation::getInstance();
+       $this->preorder_instance         = Preorder::getInstance();
+       $this->quickcheckout_instance    = QuickCheckout::getInstance();
         
     }
 
     /**
-     * Add custom CSS to the front-end
+     * Calls the method to generate custom CSS.
+     *
+     * This function invokes the generate_custom_css method from the General class instance.
+     *
+     * @since 1.0.0
+     * @return void
      */
-    public function add_generate_custom_css()
-    {
+    public function add_generate_custom_css() {
         General::getInstance()->add_generate_custom_css();
     }
 
+    /**
+     * Adds custom CSS to the general settings.
+     *
+     * This function invokes the add_custom_css method from the General class instance.
+     *
+     * @since 1.0.0
+     * @return void
+     */
     public function add_custom_css_general_settings() {
         General::getInstance()->add_custom_css();
     }
 
+    /**
+     * Adds custom JavaScript to the page.
+     *
+     * This function invokes the add_custom_js method from the General class instance.
+     *
+     * @since 1.0.0
+     * @return void
+     */
     public function add_custom_js() {
         General::getInstance()->add_custom_js();
     }
 
+    /**
+     * Adds Google Analytics tracking code.
+     *
+     * This function invokes the add_google_analytics method from the General class instance.
+     *
+     * @since 1.0.0
+     * @return void
+     */
     public function add_google_analytics() {
         General::getInstance()->add_google_analytics();
     }
