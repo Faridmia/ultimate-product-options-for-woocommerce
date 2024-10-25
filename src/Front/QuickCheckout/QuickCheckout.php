@@ -31,8 +31,18 @@ class QuickCheckout
 
     }
 
-    
-    function upow_redirect_to_checkout() {
+    /**
+     * Redirect to checkout or cart based on specific conditions.
+     *
+     * Clears notices and checks if the shop or product page is enabled for
+     * checkout redirection. If enabled on the shop or product page, redirects
+     * to the checkout page. Otherwise, redirects to the cart page.
+     *
+     * @since 1.0.4
+     *
+     * @return string Checkout or cart URL based on conditions.
+     */
+    public function upow_redirect_to_checkout() {
         
         global $woocommerce;
     
@@ -49,7 +59,18 @@ class QuickCheckout
         
     }
 
-    function upow_redirect_to_checkout_if_cart() {
+    /**
+     * Redirect to checkout or shop page based on cart status.
+     *
+     * Checks if the current page is the cart page. If the cart is empty, redirects
+     * to the shop page. If the cart has items, redirects to the checkout page.
+     *
+     * @since 1.0.4
+     *
+     * @return void
+     */
+    public function upow_redirect_to_checkout_if_cart() {
+
         if ( !is_cart() ) return;
 
         if ( WC()->cart->is_empty() ) {
