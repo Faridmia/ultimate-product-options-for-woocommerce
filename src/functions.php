@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Filter the allowed HTML tags for a specific context.
  *

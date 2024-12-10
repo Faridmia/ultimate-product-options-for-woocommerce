@@ -2,9 +2,9 @@
 Contributors: faridmia
 Tags: woocommerce, product options, custom fields, flashsale,variation swatches
 Requires at least: 6.4
-Tested up to: 6.6
+Tested up to: 6.7.1
 Requires PHP: 7.4
-Stable tag: 1.0.4
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,12 @@ The Variation Swatches for WooCommerce Addon transforms product variations into 
 
 **Preorder Product**
 Our plugin's Pre-Order feature allows you to boost sales by letting customers reserve products before their release. Enhance your marketing strategy with enticing promotions, such as exclusive discounts and free gifts. Increase purchase intention, attract more customers, and streamline inventory management. Optimize your e-commerce success with effective pre-order promotions today!
+
+**One-Click Checkout**
+One-click checkout makes online shopping faster by letting customers instantly complete their purchase with a single click, skipping cart and checkout pages. Perfect for enhancing user experience and reducing abandoned carts.
+
+**Extra Product Sorting**
+Enhance your WooCommerce shop with additional sorting options for better product organization. This feature allows you to rename the default sorting label, making it ideal for custom sorting configurations. You can also enable up to five new sorting methods: **alphabetical**, **reverse alphabetical**, **on-sale items**, **review count**, and **product availability**. Additionally, you can remove default sorting options you no longer need or hide the sorting dropdown entirely for a cleaner shop interface. Perfect for optimizing customer experience and improving product discovery, these tools offer flexibility to tailor your shop’s sorting system to suit your business needs.
 
 == Requirements ==
 
@@ -105,6 +111,12 @@ Our plugin's Pre-Order feature allows you to boost sales by letting customers re
 
 
 ## Changelog ##
+
+= Version 1.0.6 (December 07, 2024) =
+* **Added:** Extra Product Sorting.
+
+= Version 1.0.5 (November 04, 2024) =
+* **Added:** One-Click Checkout.
 
 = Version 1.0.4 (October 22, 2024) =
 * **Added:** Preorder Product.

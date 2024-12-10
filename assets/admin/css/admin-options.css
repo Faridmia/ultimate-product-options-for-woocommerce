@@ -1259,3 +1259,20 @@ input.upow-tooltip-font-size {
     width: 150px;
     height: 150px;
 }
+
+.upow-extra-options-each-item.upow-sorting-manager {
+    margin-bottom: 10px;
+}
+
+.upow-extra-options-each-item.upow-sorting-manager label {
+    display: inline-block;
+    margin: 10px 0;
+    font-size: 16px;
+    float: left;
+    width: 50%;
+    margin-top: 0;
+}
+
+.upow-sorting-manager-title {
+    margin-bottom: 30px;
+}

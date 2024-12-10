@@ -239,3 +239,33 @@ label.upow_input_field {
   align-items: center;
   gap: 10px;
 }
+
+/*loading spiner*/
+
+.loading-spinner {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(0, 0, 0,0.5);
+  border-radius: 50%;
+  border-top-color: #3498db;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  from {
+      transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+      transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+ul.wp-block-woocommerce-product-template,
+ul.products {
+  position: relative; /* Ensure the container is relative for the spinner to center correctly */
+}

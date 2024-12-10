@@ -9,6 +9,7 @@ use Ultimate\Upow\Front\Backorder\Backorder;
 use Ultimate\Upow\Front\Preorder\Preorder;
 use Ultimate\Upow\Front\SwatchVariation\SwatchVariation;
 use Ultimate\Upow\Front\QuickCheckout\QuickCheckout;
+use Ultimate\Upow\Front\SortingManager\SortingManager;
 
 /**
  * Class Front
@@ -32,6 +33,7 @@ class Front
     protected $swatches_instance;
     protected $preorder_instance;
     protected $quickcheckout_instance;
+    protected $sorting_instance;
 
     /**
      * Initialize the class
@@ -56,6 +58,7 @@ class Front
        $this->swatches_instance         = SwatchVariation::getInstance();
        $this->preorder_instance         = Preorder::getInstance();
        $this->quickcheckout_instance    = QuickCheckout::getInstance();
+       $this->sorting_instance          = SortingManager::getInstance();
         
     }
 

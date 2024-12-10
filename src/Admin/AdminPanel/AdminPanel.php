@@ -7,6 +7,7 @@ use Ultimate\Upow\Admin\AdminPanel\Settings\Backorder;
 use Ultimate\Upow\Admin\AdminPanel\Settings\Preorder;
 use Ultimate\Upow\Admin\AdminPanel\Settings\SwatchVariations;
 use Ultimate\Upow\Admin\AdminPanel\Settings\QuickCheckout;
+use Ultimate\Upow\Admin\AdminPanel\Settings\SortingManager;
 use Ultimate\Upow\Admin\Ajax\CommonAjax;
 use Ultimate\Upow\Admin\Ajax\FlashSaleAjax;
 use Ultimate\Upow\Admin\Ajax\GeneralTabAjax;
@@ -15,6 +16,7 @@ use Ultimate\Upow\Admin\Ajax\BackorderAjax;
 use Ultimate\Upow\Admin\Ajax\SwatchVariationAjax;
 use Ultimate\Upow\Admin\Ajax\PreorderAjax;
 use Ultimate\Upow\Admin\Ajax\QuickCheckoutAjax;
+use Ultimate\Upow\Admin\Ajax\SortingManagerAjax;
 
 /**
  * Class Admin
@@ -36,6 +38,7 @@ class AdminPanel {
     protected $SwatchVariationAjax;
     protected $PreorderAjax;
     protected $QuickCheckoutAjax;
+    protected $SortingManagerAjax;
     /**
      * Initialize the class
      *
@@ -53,6 +56,7 @@ class AdminPanel {
         $this->SwatchVariationAjax = new SwatchVariationAjax();
         $this->PreorderAjax = new PreorderAjax();
         $this->QuickCheckoutAjax = new QuickCheckoutAjax();
+        $this->SortingManagerAjax = new SortingManagerAjax();
 
         $this->initialize_hooks();
     }
@@ -106,6 +110,11 @@ class AdminPanel {
         add_action( 'wp_ajax_upow_quick_checkout_fields_save_options', array( $this->QuickCheckoutAjax, 'upow_quick_checkout_fields_save_options' ) );
         add_action( 'wp_ajax_nopriv_upow_quick_checkout_fields_save_options', array( $this->QuickCheckoutAjax, 'upow_quick_checkout_fields_save_options' ) );
 
+        // sorting ajax
+
+        add_action( 'wp_ajax_upow_sorting_manager_fields_save_options', array( $this->SortingManagerAjax, 'upow_sorting_manager_fields_save_options' ) );
+        add_action( 'wp_ajax_nopriv_upow_sorting_manager_fields_save_options', array( $this->SortingManagerAjax, 'upow_sorting_manager_fields_save_options' ) );
+
 
     }
 
@@ -118,5 +127,6 @@ class AdminPanel {
         SwatchVariations::getInstance()->upow_swatchvariations_fields_backend();
         Preorder::getInstance()->upow_preorder_fields_backend();
         QuickCheckout::getInstance()->upow_quickcheckout_fields_backend();
+        SortingManager::getInstance()->upow_sorting_manager_fields_backend();
     }
 }

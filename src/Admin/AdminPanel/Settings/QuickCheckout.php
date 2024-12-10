@@ -23,11 +23,13 @@ class QuickCheckout
         foreach ($options as $key => $default) {
             $this->options[$key] = get_option( $key, $default );
         }
+
     }
 
 
-    // Method to handle displaying the Flash Sales Countdown section
+    // Method to handle displaying the quick checkout setting field
     public function upow_quickcheckout_fields_backend() {
+        
         $options = $this->get_upow_quickcheckout_fields_options();
 
         ?>
